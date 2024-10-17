@@ -14,7 +14,6 @@ import java.time.LocalDate;
 
 public class PutTrainerRequest {
     private String name;
+    private int yearsOfTraining;
     private LocalDate birthDate;
-    private String password;
-    private String login;
 }

@@ -23,7 +23,8 @@ public class GetTrainersResponse {
     @EqualsAndHashCode
     public static class Trainer{
         private UUID id;
-        private String login;
+        private String name;
+        private int yearsOfTraining;
     }
 
     @Singular

@@ -13,5 +13,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class PatchTrainerRequest {
     private String name;
+    private int yearsOfTraining;
     private LocalDate birthDate;
 }

@@ -16,4 +16,13 @@
         <listener-class>com.example.gymapp.configuration.listener.CreateControllers</listener-class>
     </listener>
 
+    <context-param>
+        <description>Location to store uploaded avatars</description>
+        <param-name>avatars-upload</param-name>
+        <param-value>
+            C:\Avatar
+        </param-value>
+    </context-param>
+
+
 </web-app>

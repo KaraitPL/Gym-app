@@ -44,9 +44,9 @@ public class TrainerInMemoryRepository implements TrainerRepository {
     }
 
     @Override
-    public Optional<Trainer> findByLogin(String login) {
+    public Optional<Trainer> findByName(String name) {
         return store.findAllTrainers().stream()
-                .filter(trainer -> trainer.getLogin().equals(login))
+                .filter(trainer -> trainer.getName().equals(name))
                 .findFirst();
     }
 

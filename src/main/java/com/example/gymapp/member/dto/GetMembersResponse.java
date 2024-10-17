@@ -24,7 +24,7 @@ public class GetMembersResponse {
     public static class Member{
         private UUID id;
         private String name;
-        private Integer age;
+        private int benchPressMax;
     }
 
     @Singular

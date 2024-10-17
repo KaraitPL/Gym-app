@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TrainerRepository extends Repository<Trainer, UUID> {
-    Optional<Trainer> findByLogin(String login);
+    Optional<Trainer> findByName(String name);
 
 }
 

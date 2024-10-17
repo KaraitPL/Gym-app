@@ -16,5 +16,6 @@ import java.util.UUID;
 public class Gym implements Serializable {
     private UUID id;
     private String name;
+    private GymType gymType;
     private Integer numberOfEquipment;
 }

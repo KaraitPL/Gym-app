@@ -20,41 +20,6 @@ public class MemberInMemoryRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> find(UUID id) {
-        return store.findAllMembers().stream()
-                .filter(member -> member.getId().equals(id))
-                .findFirst();
-    }
-
-    @Override
-    public List<Member> findAll() {
-        return store.findAllMembers();
-    }
-
-    @Override
-    public void create(Member entity) {
-        store.createMember(entity);
-    }
-
-    @Override
-    public void delete(Member entity) {
-        store.deleteMember(entity.getId());
-    }
-
-    @Override
-    public void update(Member entity) {
-        store.updateMember(entity);
-    }
-
-    @Override
-    public Optional<Member> findByIdAndTrainer(UUID id, Trainer trainer) {
-        return store.findAllMembers().stream()
-                .filter(member -> member.getTrainer().equals(trainer))
-                .filter(member -> member.getId().equals(id))
-                .findFirst();
-    }
-
-    @Override
     public List<Member> findAllByTrainer(Trainer trainer) {
         return store.findAllMembers().stream()
                 .filter(member -> trainer.equals(member.getTrainer()))
@@ -62,11 +27,31 @@ public class MemberInMemoryRepository implements MemberRepository {
     }
 
     @Override
-    public List<Member> findAllByGym(Gym gym) {
-        return store.findAllMembers().stream()
-                .filter(member -> gym.equals(member.getGym()))
-                .collect(Collectors.toList());
+    public Optional<Member> find(UUID id) {
+        return Optional.empty();
     }
+
+    @Override
+    public List<Member> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void create(Member entity) {
+
+    }
+
+    @Override
+    public void delete(Member entity) {
+
+    }
+
+    @Override
+    public void update(Member entity) {
+
+    }
+
+
 
 }
 

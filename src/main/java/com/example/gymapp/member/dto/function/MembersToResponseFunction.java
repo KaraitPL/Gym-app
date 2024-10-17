@@ -15,6 +15,7 @@ public class MembersToResponseFunction implements Function<List<Member>, GetMemb
                         .map(member -> GetMembersResponse.Member.builder()
                                 .id(member.getId())
                                 .name(member.getName())
+                                .benchPressMax(member.getBenchPressMax())
                                 .build())
                         .toList())
                 .build();

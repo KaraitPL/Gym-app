@@ -1,130 +1,44 @@
-# Get all characters.
+### Get One Trainer
 
-GET http://localhost:9080/gym-app/api/trainers/
+GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000001
 
-###
+### Get One Trainer (Doesn't exist)
 
-# Get single character.
+GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000005
 
-GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+### Get All Trainers
 
-###
+GET http://localhost:9080/gym-app/api/trainers
 
-# Get single character. Not existing, created later.
+### Get Trainer Avatar
 
-GET http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
+GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000001/avatar
 
-###
+### Create Trainer Avatar.
 
-# Get single character portrait.
-
-GET http://localhost:9080/simple-rpg/api/characters/525d3e7b-bb1f-4c13-bf17-926d1a12e4c0/portrait
-
-###
-
-# Get single character portrait. Not existing, created later.
-
-GET http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87/portrait
-
-###
-
-# Create new character.
-
-PUT http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
-Content-Type: application/json
-
-{
-  "name": "Sigrid",
-  "background": "No one special.",
-  "age": 18,
-  "strength": 12,
-  "constitution": 12,
-  "charisma": 12,
-  "health": 24,
-  "profession": "f5875513-bf7b-4ae1-b8a5-5b70a1b90e76"
-}
-
-###
-
-# Create character portrait.
-
-PUT http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87/portrait
+PUT http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000002/avatar
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="portrait"; filename="sigrid.png'
+Content-Disposition: form-data; name="avatar"; filename="avatar.png'
 
-< simple-rpg/src/main/resources/pl/edu/pg/eti/kask/rpg/configuration/avatar/sigrid.png
+< src/main/resources/avatar/avatar.png
 --boundary--
 
-###
+### Patch Trainer Avatar.
 
-# Create new character. Not existing profession.
+PATCH http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000002/avatar
+Content-Type: multipart/form-data; boundary=boundary
 
-PUT http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
-Content-Type: application/json
+--boundary
+Content-Disposition: form-data; name="avatar"; filename="avatar.png'
 
-{
-  "name": "Sigrid",
-  "background": "No one special.",
-  "age": 18,
-  "strength": 12,
-  "constitution": 12,
-  "charisma": 12,
-  "profession": "3bb5b0d5-7e22-466f-8c3f-be4baa3d3b8c"
-}
+< src/main/resources/avatar/avatar.png
+--boundary--
 
-###
+### Delete Trainer Avatar
 
-# Update character.
+DELETE http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000002/avatar
 
-PATCH http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
-Content-Type: application/json
 
-{
-  "name": "Sir Sigrid",
-  "background": "Someone well known.",
-  "age": 30
-}
 
-###
-
-# Delete character.
-
-DELETE http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
-
-###
-
-# Get all professions.
-
-GET http://localhost:9080/simple-rpg/api/professions
-
-###
-
-# Get all profession characters.
-
-GET http://localhost:9080/simple-rpg/api/professions/f5875513-bf7b-4ae1-b8a5-5b70a1b90e76/characters
-
-###
-
-# Get all profession characters. Not existing.
-
-GET http://localhost:9080/simple-rpg/api/professions/d8b50a43-ed45-4441-9bcb-5db7782b47f6/characters
-
-###
-
-# Get all user characters.
-
-GET http://localhost:9080/simple-rpg/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/characters
-
-###
-
-# Get all user characters. Empty.
-
-GET http://localhost:9080/gym-app/api/trainer/0000000-0000-0000-0000-000000000001
-
-###
-
-# Get all user characters. Not existing.
-
-GET http://localhost:9080/simple-rpg/api/users/c07cab55-a56f-4d67-b351-175bb7a94b7a/characters

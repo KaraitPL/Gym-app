@@ -18,9 +18,6 @@ import java.util.List;
 public class Trainer implements Serializable {
     private UUID id;
     private String name;
-    private String login;
-    @ToString.Exclude
-    private String password;
+    private int yearsOfTraining;
     private LocalDate birthDate;
-    private List<String> genders;
 }

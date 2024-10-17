@@ -11,11 +11,7 @@ import java.util.UUID;
 
 public interface MemberRepository extends Repository<Member, UUID> {
 
-    Optional<Member> findByIdAndTrainer(UUID id, Trainer trainer);
-
     List<Member> findAllByTrainer(Trainer trainer);
-
-    List<Member> findAllByGym(Gym gym);
 
 }
 

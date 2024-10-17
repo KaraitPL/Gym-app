@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Member implements Serializable {
     private UUID id;
     private String name;
-    private Integer age;
+    private int benchPressMax;
     private Gym gym;
     private Trainer trainer;
 }

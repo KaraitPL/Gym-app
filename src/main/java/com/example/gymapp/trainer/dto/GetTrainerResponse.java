@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class GetTrainerResponse {
     private UUID id;
-    private String login;
     private String name;
+    private int yearsOfTraining;
     private LocalDate birthDate;
 }

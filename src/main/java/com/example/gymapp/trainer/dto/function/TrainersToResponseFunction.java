@@ -14,7 +14,8 @@ public class TrainersToResponseFunction implements Function<List<Trainer>, GetTr
                 .trainers(trainers.stream()
                         .map(trainer -> GetTrainersResponse.Trainer.builder()
                                 .id(trainer.getId())
-                                .login(trainer.getLogin())
+                                .name(trainer.getName())
+                                .yearsOfTraining(trainer.getYearsOfTraining())
                                 .build())
                         .toList())
                 .build();

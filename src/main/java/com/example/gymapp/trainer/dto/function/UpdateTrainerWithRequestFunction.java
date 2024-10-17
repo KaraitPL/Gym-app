@@ -11,10 +11,9 @@ public class UpdateTrainerWithRequestFunction implements BiFunction<Trainer, Pat
     public Trainer apply(Trainer entity, PatchTrainerRequest request) {
         return Trainer.builder()
                 .id(entity.getId())
-                .login(entity.getLogin())
                 .name(request.getName())
+                .yearsOfTraining(request.getYearsOfTraining())
                 .birthDate(request.getBirthDate())
-                .password(entity.getPassword())
                 .build();
     }
 
