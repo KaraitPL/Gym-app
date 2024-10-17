@@ -47,6 +47,8 @@ public class ApiServlet extends HttpServlet {
         public static final Pattern TRAINER_MEMBERS = Pattern.compile("/trainers/(%s)/members/?".formatted(UUID.pattern()));
 
         public static final Pattern TRAINER_AVATAR = Pattern.compile("/trainers/(%s)/avatar".formatted(UUID.pattern()));
+
+        public static final Pattern MEMBER = Pattern.compile("/members/(%s)".formatted(UUID.pattern()));
     }
 
     private final Jsonb jsonb = JsonbBuilder.create();
@@ -64,6 +66,7 @@ public class ApiServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         trainerController = (TrainerController) getServletContext().getAttribute("trainerController");
+        memberController = (MemberController) getServletContext().getAttribute("memberController");
         avatarPath = (String) getServletContext().getInitParameter("avatars-upload");
         System.out.println(avatarPath);
     }
@@ -109,6 +112,15 @@ public class ApiServlet extends HttpServlet {
                     response.getOutputStream().write(avatar);
                 } catch (NotFoundException ex) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
+                }
+                return;
+            } else if (path.matches(Patterns.MEMBER.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.MEMBER, path);
+                try {
+                    response.getWriter().write(jsonb.toJson(memberController.getMember(uuid)));
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
                 return;
             }

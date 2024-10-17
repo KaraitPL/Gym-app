@@ -35,7 +35,7 @@ public class TrainerInMemoryRepository implements TrainerRepository {
 
     @Override
     public void delete(Trainer entity) {
-        throw new UnsupportedOperationException("Not implemented.");
+        store.deleteTrainer(entity.getId());
     }
 
     @Override

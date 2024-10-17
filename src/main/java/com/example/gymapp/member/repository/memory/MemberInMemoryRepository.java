@@ -27,28 +27,44 @@ public class MemberInMemoryRepository implements MemberRepository {
     }
 
     @Override
+    public List<Member> findAllByGym(Gym gym){
+        return store.findAllMembers().stream()
+                .filter(member -> gym.equals(member.getGym()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Member> find(UUID id) {
-        return Optional.empty();
+        return store.findAllMembers().stream()
+                .filter(member -> member.getId().equals(id))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Member> findByName(String name) {
+        return store.findAllMembers().stream()
+                .filter(member -> member.getName().equals(name))
+                .findFirst();
     }
 
     @Override
     public List<Member> findAll() {
-        return List.of();
+        return store.findAllMembers();
     }
 
     @Override
     public void create(Member entity) {
-
+        store.createMember(entity);
     }
 
     @Override
     public void delete(Member entity) {
-
+        store.deleteMember(entity.getId());
     }
 
     @Override
     public void update(Member entity) {
-
+        store.updateMember(entity);
     }
 
 

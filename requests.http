@@ -40,5 +40,9 @@ Content-Disposition: form-data; name="avatar"; filename="avatar.png'
 
 DELETE http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000002/avatar
 
+### Get One Member
+
+GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+
 
 

@@ -1,6 +1,9 @@
 package com.example.gymapp.component;
 
+import com.example.gymapp.member.dto.function.MemberToResponseFunction;
 import com.example.gymapp.member.dto.function.MembersToResponseFunction;
+import com.example.gymapp.member.dto.function.RequestToMemberFunction;
+import com.example.gymapp.member.dto.function.UpdateMemberWithRequestFunction;
 import com.example.gymapp.trainer.dto.function.*;
 
 public class DtoFunctionFactory {
@@ -24,10 +27,11 @@ public class DtoFunctionFactory {
     public MembersToResponseFunction membersToResponse(){
         return new MembersToResponseFunction();
     }
-    /*public MemberToResponseFunction memberToResponse() {
-        return new MemberToResponseFunction();
-    }
+    public MemberToResponseFunction memberToResponse() { return new MemberToResponseFunction(); }
 
+    public RequestToMemberFunction requestToMember() { return new RequestToMemberFunction(); }
+    public UpdateMemberWithRequestFunction updateMember() { return new UpdateMemberWithRequestFunction(); }
+    /*
     public MembersToResponseFunction membersToResponse() {
         return new MembersToResponseFunction();
     }
@@ -38,14 +42,6 @@ public class DtoFunctionFactory {
 
     public GymsToResponseFunction gymsToResponse() {
         return new GymsToResponseFunction();
-    }
-
-    public RequestToMemberFunction requestToMember() {
-        return new RequestToMemberFunction();
-    }
-
-    public UpdateMemberWithRequestFunction updateMember() {
-        return new UpdateMemberWithRequestFunction();
     }
 
     public RequestToTrainerFunction requestToTrainer() {

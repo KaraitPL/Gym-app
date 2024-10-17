@@ -2,6 +2,8 @@ package com.example.gymapp.configuration.listener;
 
 import com.example.gymapp.crypto.component.Pbkdf2PasswordHash;
 import com.example.gymapp.datastore.component.DataStore;
+import com.example.gymapp.gym.repository.api.GymRepository;
+import com.example.gymapp.gym.repository.memory.GymInMemoryRepository;
 import com.example.gymapp.member.repository.api.MemberRepository;
 import com.example.gymapp.member.repository.memory.MemberInMemoryRepository;
 import com.example.gymapp.member.service.MemberService;
@@ -20,12 +22,12 @@ public class CreateServices implements ServletContextListener {
         DataStore dataSource = (DataStore) event.getServletContext().getAttribute("datasource");
 
         TrainerRepository trainerRepository = new TrainerInMemoryRepository(dataSource);
-        /*GymRepository gymRepository = new GymInMemoryRepository(dataSource);*/
+        GymRepository gymRepository = new GymInMemoryRepository(dataSource);
         MemberRepository memberRepository = new MemberInMemoryRepository(dataSource);
 
         event.getServletContext().setAttribute("trainerService", new TrainerService(trainerRepository));
         //event.getServletContext().setAttribute("memberService", new MemberService(memberRepository, trainerRepository));
-        event.getServletContext().setAttribute("memberService", new MemberService(memberRepository, trainerRepository));
+        event.getServletContext().setAttribute("memberService", new MemberService(memberRepository, trainerRepository, gymRepository));
         //event.getServletContext().setAttribute("gymService", new GymService(gymRepository));
     }
 

@@ -17,7 +17,7 @@ public class DataStore {
 
     private final Set<Trainer> trainers = new HashSet<>();
 
-    private final Set<Member> Members = new HashSet<>();
+    private final Set<Member> members = new HashSet<>();
 
     private final CloningUtility cloningUtility;
 
@@ -27,12 +27,6 @@ public class DataStore {
 
     public synchronized List<Trainer> findAllTrainers() {
         return trainers.stream()
-                .map(cloningUtility::clone)
-                .collect(Collectors.toList());
-    }
-
-    public synchronized List<Member> findAllMembers() {
-        return Members.stream()
                 .map(cloningUtility::clone)
                 .collect(Collectors.toList());
     }
@@ -55,6 +49,33 @@ public class DataStore {
     public synchronized void deleteTrainer(UUID id) throws IllegalArgumentException {
         if (!trainers.removeIf(trainer -> trainer.getId().equals(id))) {
             throw new IllegalArgumentException("The trainer with id \"%s\" does not exist".formatted(id));
+        }
+    }
+
+    public synchronized List<Member> findAllMembers() {
+        return members.stream()
+                .map(cloningUtility::clone)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized void createMember(Member value) throws IllegalArgumentException {
+        if (members.stream().anyMatch(member -> member.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("The member id \"%s\" is not unique".formatted(value.getId()));
+        }
+        members.add(cloningUtility.clone(value));
+    }
+
+    public synchronized void updateMember(Member value) throws IllegalArgumentException {
+        if (members.removeIf(member -> member.getId().equals(value.getId()))) {
+            members.add(cloningUtility.clone(value));
+        } else {
+            throw new IllegalArgumentException("The member with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
+    public synchronized void deleteMember(UUID id) throws IllegalArgumentException {
+        if (!members.removeIf(member -> member.getId().equals(id))) {
+            throw new IllegalArgumentException("The member with id \"%s\" does not exist".formatted(id));
         }
     }
 
