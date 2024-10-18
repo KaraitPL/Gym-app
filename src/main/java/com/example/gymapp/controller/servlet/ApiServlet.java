@@ -4,6 +4,8 @@ import com.example.gymapp.controller.servlet.exception.AlreadyExistsException;
 import com.example.gymapp.controller.servlet.exception.BadRequestException;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.member.controller.api.MemberController;
+import com.example.gymapp.member.dto.PatchMemberRequest;
+import com.example.gymapp.member.dto.PutMemberRequest;
 import com.example.gymapp.trainer.controller.api.TrainerController;
 import com.example.gymapp.trainer.dto.PatchTrainerRequest;
 import com.example.gymapp.trainer.dto.PutTrainerRequest;
@@ -49,6 +51,8 @@ public class ApiServlet extends HttpServlet {
         public static final Pattern TRAINER_AVATAR = Pattern.compile("/trainers/(%s)/avatar".formatted(UUID.pattern()));
 
         public static final Pattern MEMBER = Pattern.compile("/members/(%s)".formatted(UUID.pattern()));
+
+        public static final Pattern MEMBERS = Pattern.compile("/members/?");
     }
 
     private final Jsonb jsonb = JsonbBuilder.create();
@@ -123,6 +127,14 @@ public class ApiServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
                 return;
+            } else if (path.matches(Patterns.MEMBERS.pattern())) {
+                response.setContentType("application/json");
+                try {
+                    response.getWriter().write(jsonb.toJson(memberController.getMembers()));
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -156,6 +168,16 @@ public class ApiServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
                 }
                 return;
+            } else if (path.matches(Patterns.MEMBER.pattern())) {
+                UUID uuid = extractUuid(Patterns.MEMBER, path);
+                try {
+                    memberController.putMember(uuid, jsonb.fromJson(request.getReader(), PutMemberRequest.class));
+                    response.addHeader("Location", createUrl(request, Paths.API, "members", uuid.toString()));
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } catch (BadRequestException ex) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                }
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -185,6 +207,15 @@ public class ApiServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
                 }
                 return;
+            } else if (path.matches(Patterns.MEMBER.pattern())) {
+                UUID uuid = extractUuid(Patterns.MEMBER, path);
+                try {
+                    memberController.deleteMember(uuid);
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -212,6 +243,15 @@ public class ApiServlet extends HttpServlet {
                     response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 } catch (NotFoundException ex) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
+                }
+                return;
+            } else if (path.matches(Patterns.MEMBER.pattern())) {
+                UUID uuid = extractUuid(Patterns.MEMBER, path);
+                try {
+                    memberController.patchMember(uuid, jsonb.fromJson(request.getReader(), PatchMemberRequest.class));
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
                 return;
             }

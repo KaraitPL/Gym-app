@@ -45,7 +45,7 @@ public class MemberService {
 
     public void update(Member member) { memberRepository.update(member); }
 
-    public void delete(UUID id) { memberRepository.find(id).orElseThrow(NotFoundException::new); }
+    public void delete(UUID id) { memberRepository.delete(memberRepository.find(id).orElseThrow(NotFoundException::new)); }
 
 
 

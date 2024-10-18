@@ -25,7 +25,7 @@ Content-Disposition: form-data; name="avatar"; filename="avatar.png'
 < src/main/resources/avatar/avatar.png
 --boundary--
 
-### Patch Trainer Avatar.
+### Patch Trainer Avatar
 
 PATCH http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000002/avatar
 Content-Type: multipart/form-data; boundary=boundary
@@ -44,5 +44,43 @@ DELETE http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000
 
 GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
 
+### Get One Member (Doesn't exist)
+
+GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000007
+
+#### Create Member
+#
+#PUT http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
+#Content-Type: application/json
+#
+#{
+#  "name": "Pawel",
+#  "benchPressMax": "40",
+#  "trainer": "00000000-0000-0000-0000-000000000001",
+#  "gym": "f5875513-bf7b-4ae1-b8a5-5b70a1b90e76"
+#}
+
+### Update Member
+
+PATCH http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+Content-Type: application/json
+
+{
+  "name": "Oskar",
+  "benchPressMax": "110"
+}
+
+
+### Delete Member
+
+DELETE http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+
+### Get All Members
+
+GET http://localhost:9080/gym-app/api/members
+
+### Get Trainer Members
+
+GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000001/members
 
 
