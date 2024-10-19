@@ -32,6 +32,13 @@ public class MemberSimpleController implements MemberController {
     }
 
     @Override
+    public GetMembersResponse getGymMembers(UUID id) {
+        return service.findAllByGym(id)
+                .map(factory.membersToResponse())
+                .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
     public GetMemberResponse getMember(UUID id) {
         return service.find(id)
                 .map(factory.memberToResponse())

@@ -16,25 +16,34 @@ public class GymInMemoryRepository implements GymRepository {
     }
 
     @Override
+    public Optional<Gym> findByName(String name) {
+        return store.findAllGyms().stream()
+            .filter(gym -> gym.getName().equals(name))
+            .findFirst();
+    }
+
+    @Override
     public Optional<Gym> find(UUID id) {
-        return Optional.empty();
+        return store.findAllGyms().stream()
+                .filter(gym -> gym.getId().equals(id))
+                .findFirst();
     }
 
     @Override
     public List<Gym> findAll() {
-        return List.of();
+        return store.findAllGyms();
     }
 
     @Override
     public void create(Gym entity) {
-
+        store.createGym(entity);
     }
     @Override
     public void delete(Gym entity) {
-
+        store.deleteGym(entity.getId());
     }
     @Override
     public void update(Gym entity) {
-
+        store.updateGym(entity);
     }
 }

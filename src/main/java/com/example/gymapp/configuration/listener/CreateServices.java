@@ -4,6 +4,7 @@ import com.example.gymapp.crypto.component.Pbkdf2PasswordHash;
 import com.example.gymapp.datastore.component.DataStore;
 import com.example.gymapp.gym.repository.api.GymRepository;
 import com.example.gymapp.gym.repository.memory.GymInMemoryRepository;
+import com.example.gymapp.gym.service.GymService;
 import com.example.gymapp.member.repository.api.MemberRepository;
 import com.example.gymapp.member.repository.memory.MemberInMemoryRepository;
 import com.example.gymapp.member.service.MemberService;
@@ -26,9 +27,8 @@ public class CreateServices implements ServletContextListener {
         MemberRepository memberRepository = new MemberInMemoryRepository(dataSource);
 
         event.getServletContext().setAttribute("trainerService", new TrainerService(trainerRepository));
-        //event.getServletContext().setAttribute("memberService", new MemberService(memberRepository, trainerRepository));
         event.getServletContext().setAttribute("memberService", new MemberService(memberRepository, trainerRepository, gymRepository));
-        //event.getServletContext().setAttribute("gymService", new GymService(gymRepository));
+        event.getServletContext().setAttribute("gymService", new GymService(gymRepository));
     }
 
 }

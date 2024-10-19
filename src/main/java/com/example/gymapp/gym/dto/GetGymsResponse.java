@@ -1,8 +1,7 @@
-package com.example.gymapp.gym.entity;
+package com.example.gymapp.gym.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,8 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-
-public class Gym implements Serializable {
+public class GetGymsResponse {
     @Getter
     @Setter
     @Builder
@@ -22,14 +20,11 @@ public class Gym implements Serializable {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     @EqualsAndHashCode
-    public static class Member{
+    public static class Gym{
         private UUID id;
         private String name;
-        private int benchPressMax;
+        private int numberOfEquipment;
     }
-    private UUID id;
-    private String name;
-    private GymType gymType;
-    private Integer numberOfEquipment;
-    private List<Member> members;
+
+    private List<Gym> gyms;
 }

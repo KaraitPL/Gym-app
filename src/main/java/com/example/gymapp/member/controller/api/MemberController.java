@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface MemberController {
     GetMembersResponse getTrainerMembers(UUID id);
 
+    GetMembersResponse getGymMembers(UUID id);
+
     GetMemberResponse getMember(UUID id);
 
     GetMembersResponse getMembers();

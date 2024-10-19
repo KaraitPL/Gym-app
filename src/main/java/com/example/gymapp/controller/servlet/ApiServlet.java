@@ -3,6 +3,8 @@ package com.example.gymapp.controller.servlet;
 import com.example.gymapp.controller.servlet.exception.AlreadyExistsException;
 import com.example.gymapp.controller.servlet.exception.BadRequestException;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
+import com.example.gymapp.gym.controller.api.GymController;
+import com.example.gymapp.gym.dto.PutGymRequest;
 import com.example.gymapp.member.controller.api.MemberController;
 import com.example.gymapp.member.dto.PatchMemberRequest;
 import com.example.gymapp.member.dto.PutMemberRequest;
@@ -33,6 +35,8 @@ public class ApiServlet extends HttpServlet {
 
     private MemberController memberController;
 
+    private GymController gymController;
+
     private String avatarPath;
 
     public static final class Paths {
@@ -46,6 +50,10 @@ public class ApiServlet extends HttpServlet {
 
         public static final Pattern TRAINERS = Pattern.compile("/trainers/?");
 
+        public static final Pattern GYM = Pattern.compile("/gyms/(%s)".formatted(UUID.pattern()));
+
+        public static final Pattern GYMS = Pattern.compile("/gyms/?");
+
         public static final Pattern TRAINER_MEMBERS = Pattern.compile("/trainers/(%s)/members/?".formatted(UUID.pattern()));
 
         public static final Pattern TRAINER_AVATAR = Pattern.compile("/trainers/(%s)/avatar".formatted(UUID.pattern()));
@@ -53,6 +61,8 @@ public class ApiServlet extends HttpServlet {
         public static final Pattern MEMBER = Pattern.compile("/members/(%s)".formatted(UUID.pattern()));
 
         public static final Pattern MEMBERS = Pattern.compile("/members/?");
+
+        public static final Pattern GYM_MEMBERS = Pattern.compile("/gyms/(%s)/members/?".formatted(UUID.pattern()));
     }
 
     private final Jsonb jsonb = JsonbBuilder.create();
@@ -71,6 +81,7 @@ public class ApiServlet extends HttpServlet {
         super.init();
         trainerController = (TrainerController) getServletContext().getAttribute("trainerController");
         memberController = (MemberController) getServletContext().getAttribute("memberController");
+        gymController = (GymController) getServletContext().getAttribute("gymController");
         avatarPath = (String) getServletContext().getInitParameter("avatars-upload");
         System.out.println(avatarPath);
     }
@@ -135,6 +146,32 @@ public class ApiServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
                 return;
+            } else if (path.matches(Patterns.GYM.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.GYM, path);
+                try {
+                    response.getWriter().write(jsonb.toJson(gymController.getGym(uuid)));
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
+            } else if (path.matches(Patterns.GYMS.pattern())) {
+                response.setContentType("application/json");
+                try {
+                    response.getWriter().write(jsonb.toJson(gymController.getGyms()));
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
+            } else if (path.matches(Patterns.GYM_MEMBERS.pattern())) {
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.GYM_MEMBERS, path);
+                try {
+                    response.getWriter().write(jsonb.toJson(memberController.getGymMembers(uuid)));
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -173,6 +210,16 @@ public class ApiServlet extends HttpServlet {
                 try {
                     memberController.putMember(uuid, jsonb.fromJson(request.getReader(), PutMemberRequest.class));
                     response.addHeader("Location", createUrl(request, Paths.API, "members", uuid.toString()));
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } catch (BadRequestException ex) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                }
+                return;
+            } else if (path.matches(Patterns.GYM.pattern())) {
+                UUID uuid = extractUuid(Patterns.GYM, path);
+                try {
+                    gymController.putGym(uuid, jsonb.fromJson(request.getReader(), PutGymRequest.class));
+                    response.addHeader("Location", createUrl(request, Paths.API, "gyms", uuid.toString()));
                     response.setStatus(HttpServletResponse.SC_CREATED);
                 } catch (BadRequestException ex) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);

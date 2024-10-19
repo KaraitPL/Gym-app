@@ -14,6 +14,17 @@ GET http://localhost:9080/gym-app/api/trainers
 
 GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000001/avatar
 
+#### Create Trainer
+
+PUT http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0001-000000000005
+Content-Type: application/json
+
+{
+  "name": "Trener",
+  "yearsOfTraining": 3,
+  "birthDate": "1990-05-21"
+}
+
 ### Create Trainer Avatar.
 
 PUT http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000002/avatar
@@ -49,16 +60,16 @@ GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-0000000000
 GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000007
 
 #### Create Member
-#
-#PUT http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
-#Content-Type: application/json
-#
-#{
-#  "name": "Pawel",
-#  "benchPressMax": "40",
-#  "trainer": "00000000-0000-0000-0000-000000000001",
-#  "gym": "f5875513-bf7b-4ae1-b8a5-5b70a1b90e76"
-#}
+
+PUT http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
+Content-Type: application/json
+
+{
+  "name": "Pawel",
+  "benchPressMax": "40",
+  "trainer": "00000000-0000-0000-0000-000000000001",
+  "gym": "00000000-0000-0000-0001-000000000001"
+}
 
 ### Update Member
 
@@ -83,4 +94,29 @@ GET http://localhost:9080/gym-app/api/members
 
 GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000001/members
 
+### Get One Gym
 
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000001
+
+### Get One Gym (Doesn't exist)
+
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000005
+
+### Get All Gyms
+
+GET http://localhost:9080/gym-app/api/gyms
+
+### Create Gym
+
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000004
+Content-Type: application/json
+
+{
+  "name": "Nowa",
+  "numberOfEquipment": 32,
+  "gymType":"NORMAL"
+}
+
+### Get Gym Members
+
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000001/members

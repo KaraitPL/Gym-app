@@ -2,6 +2,7 @@ package com.example.gymapp.configuration.listener;
 
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.entity.GymType;
+import com.example.gymapp.gym.service.GymService;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.service.MemberService;
 import com.example.gymapp.trainer.entity.Trainer;
@@ -22,11 +23,14 @@ public class InitializedData implements ServletContextListener {
 
     private TrainerService trainerService;
 
+    private GymService gymService;
+
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
         memberService = (MemberService) event.getServletContext().getAttribute("memberService");
         trainerService = (TrainerService) event.getServletContext().getAttribute("trainerService");
+        gymService = (GymService) event.getServletContext().getAttribute("gymService");
         init();
     }
 
@@ -65,10 +69,35 @@ public class InitializedData implements ServletContextListener {
         trainerService.create(trainerZyzz);
         trainerService.create(trainerDavid);
 
+        Gym goldGym = Gym.builder()
+                .id(UUID.fromString("00000000-0000-0000-0001-000000000001"))
+                .name("Gold's Gym")
+                .numberOfEquipment(532)
+                .gymType(GymType.NORMAL)
+                .build();
+
+        Gym muscleGym = Gym.builder()
+                .id(UUID.fromString("00000000-0000-0000-0001-000000000002"))
+                .name("Muscle Gym")
+                .numberOfEquipment(45)
+                .gymType(GymType.BEACH)
+                .build();
+
+        Gym streetWorkoutPark = Gym.builder()
+                .id(UUID.fromString("00000000-0000-0000-0001-000000000003"))
+                .name("Street Workout Park")
+                .numberOfEquipment(23)
+                .gymType(GymType.CALISTHENIC)
+                .build();
+
+        gymService.create(goldGym);
+        gymService.create(muscleGym);
+        gymService.create(streetWorkoutPark);
 
         Member memberOskar = Member.builder()
                 .id(UUID.fromString("00000000-0000-0000-0002-000000000001"))
                 .name("Oskar")
+                .gym(muscleGym)
                 .benchPressMax(110)
                 .trainer(trainerArnold)
                 .build();
@@ -76,6 +105,7 @@ public class InitializedData implements ServletContextListener {
         Member memberMarcin = Member.builder()
                 .id(UUID.fromString("00000000-0000-0000-0002-000000000002"))
                 .name("Marcin")
+                .gym(streetWorkoutPark)
                 .benchPressMax(80)
                 .trainer(trainerRonnie)
                 .build();
@@ -83,6 +113,7 @@ public class InitializedData implements ServletContextListener {
         Member memberAntoni = Member.builder()
                 .id(UUID.fromString("00000000-0000-0000-0002-000000000003"))
                 .name("Antoni")
+                .gym(goldGym)
                 .benchPressMax(100)
                 .trainer(trainerZyzz)
                 .build();
@@ -90,6 +121,7 @@ public class InitializedData implements ServletContextListener {
         Member memberIgnacy = Member.builder()
                 .id(UUID.fromString("00000000-0000-0000-0002-000000000004"))
                 .name("Ignacy")
+                .gym(muscleGym)
                 .benchPressMax(100)
                 .trainer(trainerDavid)
                 .build();

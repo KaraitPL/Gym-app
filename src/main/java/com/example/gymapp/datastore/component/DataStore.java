@@ -18,6 +18,7 @@ public class DataStore {
     private final Set<Trainer> trainers = new HashSet<>();
 
     private final Set<Member> members = new HashSet<>();
+    private final Set<Gym> gyms = new HashSet<>();
 
     private final CloningUtility cloningUtility;
 
@@ -76,6 +77,33 @@ public class DataStore {
     public synchronized void deleteMember(UUID id) throws IllegalArgumentException {
         if (!members.removeIf(member -> member.getId().equals(id))) {
             throw new IllegalArgumentException("The member with id \"%s\" does not exist".formatted(id));
+        }
+    }
+
+    public synchronized List<Gym> findAllGyms() {
+        return gyms.stream()
+                .map(cloningUtility::clone)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized void createGym(Gym value) throws IllegalArgumentException {
+        if (gyms.stream().anyMatch(gym -> gym.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("The gym id \"%s\" is not unique".formatted(value.getId()));
+        }
+        gyms.add(cloningUtility.clone(value));
+    }
+
+    public synchronized void updateGym(Gym value) throws IllegalArgumentException {
+        if (gyms.removeIf(gym -> gym.getId().equals(value.getId()))) {
+            gyms.add(cloningUtility.clone(value));
+        } else {
+            throw new IllegalArgumentException("The gym with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
+    public synchronized void deleteGym(UUID id) throws IllegalArgumentException {
+        if (!gyms.removeIf(gym -> gym.getId().equals(id))) {
+            throw new IllegalArgumentException("The gym with id \"%s\" does not exist".formatted(id));
         }
     }
 
