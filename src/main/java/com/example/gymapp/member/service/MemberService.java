@@ -6,11 +6,16 @@ import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.repository.api.MemberRepository;
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.repository.api.TrainerRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -19,6 +24,7 @@ public class MemberService {
 
     private final TrainerRepository trainerRepository;
 
+    @Inject
     public MemberService(MemberRepository memberRepository, TrainerRepository trainerRepository, GymRepository gymRepository) {
         this.memberRepository = memberRepository;
         this.trainerRepository = trainerRepository;

@@ -9,16 +9,20 @@ import com.example.gymapp.member.dto.GetMembersResponse;
 import com.example.gymapp.member.dto.PatchMemberRequest;
 import com.example.gymapp.member.dto.PutMemberRequest;
 import com.example.gymapp.member.service.MemberService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 
 import java.util.UUID;
 
+@RequestScoped
 public class MemberSimpleController implements MemberController {
 
     private final MemberService service;
 
     private final DtoFunctionFactory factory;
 
+    @Inject
     public MemberSimpleController(MemberService service, DtoFunctionFactory factory) {
         this.service = service;
         this.factory = factory;

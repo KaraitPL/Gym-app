@@ -4,6 +4,9 @@ import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.serialization.component.CloningUtility;
 import com.example.gymapp.trainer.entity.Trainer;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import java.util.HashSet;
@@ -13,6 +16,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Log
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class DataStore {
 
     private final Set<Trainer> trainers = new HashSet<>();
@@ -22,6 +27,7 @@ public class DataStore {
 
     private final CloningUtility cloningUtility;
 
+    @Inject
     public DataStore(CloningUtility cloningUtility) {
         this.cloningUtility = cloningUtility;
     }
@@ -63,12 +69,14 @@ public class DataStore {
         if (members.stream().anyMatch(member -> member.getId().equals(value.getId()))) {
             throw new IllegalArgumentException("The member id \"%s\" is not unique".formatted(value.getId()));
         }
-        members.add(cloningUtility.clone(value));
+        Member entity = cloneWithRelationships(value);
+        members.add(entity);
     }
 
     public synchronized void updateMember(Member value) throws IllegalArgumentException {
+        Member entity = cloneWithRelationships(value);
         if (members.removeIf(member -> member.getId().equals(value.getId()))) {
-            members.add(cloningUtility.clone(value));
+            members.add(entity);
         } else {
             throw new IllegalArgumentException("The member with id \"%s\" does not exist".formatted(value.getId()));
         }
@@ -105,6 +113,26 @@ public class DataStore {
         if (!gyms.removeIf(gym -> gym.getId().equals(id))) {
             throw new IllegalArgumentException("The gym with id \"%s\" does not exist".formatted(id));
         }
+    }
+
+    private Member cloneWithRelationships(Member value) {
+        Member entity = cloningUtility.clone(value);
+
+        if (entity.getTrainer() != null) {
+            entity.setTrainer(trainers.stream()
+                    .filter(trainer -> trainer.getId().equals(value.getTrainer().getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No trainer with id \"%s\".".formatted(value.getTrainer().getId()))));
+        }
+
+        if (entity.getGym() != null) {
+            entity.setGym(gyms.stream()
+                    .filter(gym -> gym.getId().equals(value.getGym().getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No gym with id \"%s\".".formatted(value.getGym().getId()))));
+        }
+
+        return entity;
     }
 
 }

@@ -9,6 +9,8 @@ import com.example.gymapp.trainer.dto.GetTrainersResponse;
 import com.example.gymapp.trainer.dto.PatchTrainerRequest;
 import com.example.gymapp.trainer.dto.PutTrainerRequest;
 import com.example.gymapp.trainer.service.TrainerService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,12 +19,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@RequestScoped
 public class TrainerSimpleController implements TrainerController {
 
     private final TrainerService trainerService;
 
     private final DtoFunctionFactory factory;
 
+    @Inject
     public TrainerSimpleController(DtoFunctionFactory factory, TrainerService trainerService) {
         this.factory = factory;
         this.trainerService = trainerService;

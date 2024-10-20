@@ -5,16 +5,20 @@ import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.repository.api.MemberRepository;
 import com.example.gymapp.trainer.entity.Trainer;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequestScoped
 public class MemberInMemoryRepository implements MemberRepository {
 
     private final DataStore store;
 
+    @Inject
     public MemberInMemoryRepository(DataStore store) {
         this.store = store;
     }

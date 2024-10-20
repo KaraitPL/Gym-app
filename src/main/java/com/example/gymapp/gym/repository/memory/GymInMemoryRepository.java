@@ -4,13 +4,17 @@ import com.example.gymapp.datastore.component.DataStore;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
 import com.example.gymapp.member.entity.Member;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequestScoped
 public class GymInMemoryRepository implements GymRepository {
     private final DataStore store;
+    @Inject
     public GymInMemoryRepository(DataStore store) {
         this.store = store;
     }

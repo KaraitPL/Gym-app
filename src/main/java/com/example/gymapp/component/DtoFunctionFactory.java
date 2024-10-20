@@ -9,7 +9,9 @@ import com.example.gymapp.member.dto.function.MembersToResponseFunction;
 import com.example.gymapp.member.dto.function.RequestToMemberFunction;
 import com.example.gymapp.member.dto.function.UpdateMemberWithRequestFunction;
 import com.example.gymapp.trainer.dto.function.*;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class DtoFunctionFactory {
 
     public TrainerToResponseFunction trainerToResponse(){

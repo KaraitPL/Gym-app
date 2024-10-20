@@ -11,13 +11,17 @@ import com.example.gymapp.gym.dto.PutGymRequest;
 import com.example.gymapp.gym.service.GymService;
 import com.example.gymapp.member.dto.GetMembersResponse;
 import com.example.gymapp.member.service.MemberService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.UUID;
 
+@RequestScoped
 public class GymSimpleController implements GymController {
     private final GymService gymService;
     private final DtoFunctionFactory factory;
 
+    @Inject
     public GymSimpleController(DtoFunctionFactory factory, GymService gymService){
         this.factory = factory;
         this.gymService = gymService;

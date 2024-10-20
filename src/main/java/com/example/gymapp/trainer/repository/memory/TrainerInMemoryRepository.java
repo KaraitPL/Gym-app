@@ -3,15 +3,19 @@ package com.example.gymapp.trainer.repository.memory;
 import com.example.gymapp.datastore.component.DataStore;
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.repository.api.TrainerRepository;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequestScoped
 public class TrainerInMemoryRepository implements TrainerRepository {
 
     private final DataStore store;
 
+    @Inject
     public TrainerInMemoryRepository(DataStore store) {
         this.store = store;
     }

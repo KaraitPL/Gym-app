@@ -2,10 +2,12 @@ package com.example.gymapp.trainer.service;
 
 import com.example.gymapp.controller.servlet.exception.AlreadyExistsException;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
-import com.example.gymapp.crypto.component.Pbkdf2PasswordHash;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.repository.api.TrainerRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +18,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class TrainerService {
 
     private final TrainerRepository repository;
 
+    @Inject
     public TrainerService(TrainerRepository repository) {
         this.repository = repository;
     }

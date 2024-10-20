@@ -1,11 +1,13 @@
 package com.example.gymapp.serialization.component;
 
+import jakarta.enterprise.context.Dependent;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import java.io.*;
 
 @Log
+@Dependent
 public class CloningUtility {
 
     @SneakyThrows

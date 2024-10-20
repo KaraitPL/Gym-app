@@ -11,6 +11,7 @@ import com.example.gymapp.member.dto.PutMemberRequest;
 import com.example.gymapp.trainer.controller.api.TrainerController;
 import com.example.gymapp.trainer.dto.PatchTrainerRequest;
 import com.example.gymapp.trainer.dto.PutTrainerRequest;
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
@@ -67,6 +68,13 @@ public class ApiServlet extends HttpServlet {
 
     private final Jsonb jsonb = JsonbBuilder.create();
 
+    @Inject
+    public ApiServlet(MemberController memberController, GymController gymController, TrainerController trainerController) {
+        this.memberController = memberController;
+        this.gymController = gymController;
+        this.trainerController = trainerController;
+    }
+
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getMethod().equals("PATCH")) {
@@ -79,11 +87,11 @@ public class ApiServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        trainerController = (TrainerController) getServletContext().getAttribute("trainerController");
-        memberController = (MemberController) getServletContext().getAttribute("memberController");
-        gymController = (GymController) getServletContext().getAttribute("gymController");
+        //trainerController = (TrainerController) getServletContext().getAttribute("trainerController");
+        //memberController = (MemberController) getServletContext().getAttribute("memberController");
+        //gymController = (GymController) getServletContext().getAttribute("gymController");
         avatarPath = (String) getServletContext().getInitParameter("avatars-upload");
-        System.out.println(avatarPath);
+        //System.out.println(avatarPath);
     }
 
     @SuppressWarnings("RedundantThrows")

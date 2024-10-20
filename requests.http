@@ -84,7 +84,7 @@ Content-Type: application/json
 
 ### Delete Member
 
-DELETE http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+DELETE http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
 
 ### Get All Members
 

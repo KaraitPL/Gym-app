@@ -3,14 +3,20 @@ package com.example.gymapp.gym.service;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequestScoped
+@NoArgsConstructor(force = true)
 public class GymService {
     private final GymRepository repository;
 
+    @Inject
     public GymService(GymRepository gymRepository) { this.repository = gymRepository; }
 
     public Optional<Gym> find(UUID id) { return repository.find(id); }

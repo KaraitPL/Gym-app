@@ -7,6 +7,11 @@ import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.service.MemberService;
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.service.TrainerService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.control.RequestContextController;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -17,25 +22,36 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@WebListener
-public class InitializedData implements ServletContextListener {
-    private MemberService memberService;
+@ApplicationScoped
+public class InitializedData {
+    private final MemberService memberService;
 
-    private TrainerService trainerService;
+    private final TrainerService trainerService;
 
-    private GymService gymService;
+    private final GymService gymService;
 
+    private final RequestContextController requestContextController;
 
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        memberService = (MemberService) event.getServletContext().getAttribute("memberService");
-        trainerService = (TrainerService) event.getServletContext().getAttribute("trainerService");
-        gymService = (GymService) event.getServletContext().getAttribute("gymService");
+    @Inject
+    public InitializedData(
+            MemberService memberService,
+            TrainerService trainerService,
+            GymService gymService,
+            RequestContextController requestContextController
+    ) {
+        this.memberService = memberService;
+        this.trainerService = trainerService;
+        this.gymService = gymService;
+        this.requestContextController = requestContextController;
+    }
+
+    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
         init();
     }
 
     @SneakyThrows
     private void init() {
+        requestContextController.activate();
         Trainer trainerArnold = Trainer.builder()
                 .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
                 .name("Arnold Schwarzenegger")
@@ -130,6 +146,19 @@ public class InitializedData implements ServletContextListener {
         memberService.create(memberMarcin);
         memberService.create(memberAntoni);
         memberService.create(memberIgnacy);
+
+        requestContextController.deactivate();
+    }
+
+    @SneakyThrows
+    private byte[] getResourceAsByteArray(String name) {
+        try (InputStream is = this.getClass().getResourceAsStream(name)) {
+            if (is != null) {
+                return is.readAllBytes();
+            } else {
+                throw new IllegalStateException("Unable to get resource %s".formatted(name));
+            }
+        }
     }
 
 }
