@@ -3,7 +3,6 @@ package com.example.gymapp.gym.repository.memory;
 import com.example.gymapp.datastore.component.DataStore;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
-import com.example.gymapp.member.entity.Member;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
@@ -50,4 +49,5 @@ public class GymInMemoryRepository implements GymRepository {
     public void update(Gym entity) {
         store.updateGym(entity);
     }
+
 }

@@ -4,6 +4,7 @@ import com.example.gymapp.controller.servlet.exception.AlreadyExistsException;
 import com.example.gymapp.controller.servlet.exception.BadRequestException;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.gym.controller.api.GymController;
+import com.example.gymapp.gym.dto.PatchGymRequest;
 import com.example.gymapp.gym.dto.PutGymRequest;
 import com.example.gymapp.member.controller.api.MemberController;
 import com.example.gymapp.member.dto.PatchMemberRequest;
@@ -84,16 +85,6 @@ public class ApiServlet extends HttpServlet {
         }
     }
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        //trainerController = (TrainerController) getServletContext().getAttribute("trainerController");
-        //memberController = (MemberController) getServletContext().getAttribute("memberController");
-        //gymController = (GymController) getServletContext().getAttribute("gymController");
-        avatarPath = (String) getServletContext().getInitParameter("avatars-upload");
-        //System.out.println(avatarPath);
-    }
-
     @SuppressWarnings("RedundantThrows")
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -130,7 +121,7 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.TRAINER_AVATAR, path);
                 response.setContentType("image/png");
                 try {
-                    byte[] avatar = trainerController.getTrainerAvatar(uuid, avatarPath);
+                    byte[] avatar = trainerController.getTrainerAvatar(uuid);
                     response.setContentLength(avatar.length);
                     response.getOutputStream().write(avatar);
                 } catch (NotFoundException ex) {
@@ -205,7 +196,7 @@ public class ApiServlet extends HttpServlet {
                 response.setContentType("image/png");
                 UUID uuid = extractUuid(Patterns.TRAINER_AVATAR, path);
                 try {
-                    trainerController.putTrainerAvatar(uuid, request.getPart("avatar").getInputStream(), avatarPath);
+                    trainerController.putTrainerAvatar(uuid, request.getPart("avatar").getInputStream());
                     response.setStatus(HttpServletResponse.SC_CREATED);
                 } catch (AlreadyExistsException ex) {
                     response.sendError(HttpServletResponse.SC_CONFLICT, ex.getMessage());
@@ -256,7 +247,7 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.TRAINER_AVATAR.pattern())) {
                 UUID uuid = extractUuid(Patterns.TRAINER_AVATAR, path);
                 try {
-                    trainerController.deleteTrainerAvatar(uuid, avatarPath);
+                    trainerController.deleteTrainerAvatar(uuid);
                     response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 } catch (NotFoundException ex) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
@@ -294,7 +285,7 @@ public class ApiServlet extends HttpServlet {
                 response.setContentType("image/png");
                 UUID uuid = extractUuid(Patterns.TRAINER_AVATAR, path);
                 try {
-                    trainerController.patchTrainerAvatar(uuid, request.getPart("avatar").getInputStream(), avatarPath);
+                    trainerController.patchTrainerAvatar(uuid, request.getPart("avatar").getInputStream());
                     response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 } catch (NotFoundException ex) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage());
@@ -309,7 +300,17 @@ public class ApiServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
                 return;
+            } else if (path.matches(Patterns.GYM.pattern())) {
+                UUID uuid = extractUuid(Patterns.GYM, path);
+                try {
+                    gymController.patchGym(uuid, jsonb.fromJson(request.getReader(), PatchGymRequest.class));
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                } catch (NotFoundException ex) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+                return;
             }
+
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }

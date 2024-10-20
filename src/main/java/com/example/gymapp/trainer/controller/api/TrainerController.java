@@ -20,12 +20,12 @@ public interface TrainerController {
 
     void deleteTrainer(UUID id);
 
-    byte[] getTrainerAvatar(UUID id, String pathToAvatars);
+    byte[] getTrainerAvatar(UUID id);
 
-    void putTrainerAvatar(UUID id, InputStream avatar, String pathToAvatars);
+    void putTrainerAvatar(UUID id, InputStream avatar);
 
-    void deleteTrainerAvatar(UUID id, String pathToAvatars);
+    void deleteTrainerAvatar(UUID id);
 
-    void patchTrainerAvatar(UUID id, InputStream avatar, String pathToAvatars);
+    void patchTrainerAvatar(UUID id, InputStream avatar);
 
 }

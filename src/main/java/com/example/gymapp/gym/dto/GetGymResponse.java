@@ -33,5 +33,5 @@ public class GetGymResponse {
     private String name;
     private int numberOfEquipment;
     private GymType gymType;
-    //private List<Member> members;
+    private List<Member> members;
 }

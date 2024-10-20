@@ -20,4 +20,8 @@ public class Trainer implements Serializable {
     private String name;
     private int yearsOfTraining;
     private LocalDate birthDate;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private byte[] avatar;
 }

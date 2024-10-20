@@ -1,6 +1,7 @@
 package com.example.gymapp.trainer.service;
 
 import com.example.gymapp.controller.servlet.exception.AlreadyExistsException;
+import com.example.gymapp.controller.servlet.exception.BadRequestException;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.trainer.entity.Trainer;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,35 +55,40 @@ public class TrainerService {
         repository.delete(repository.find(id).orElseThrow(NotFoundException::new));
     }
 
-    public void createAvatar(UUID id, InputStream avatar, String pathToAvatars) throws AlreadyExistsException {
-        repository.find(id).ifPresent(user -> {
+    public void createAvatar(UUID id, InputStream is) {
+        repository.find(id).ifPresent(trainer -> {
             try {
-                Path destinationPath = Path.of(pathToAvatars, id.toString() + ".png");
-                if (Files.exists(destinationPath)) {
-                    throw new AlreadyExistsException("Avatar already exists, to update avatar use PATCH method");
+                if (trainer.getAvatar() != null) {
+                    throw new BadRequestException("Already exists");
                 }
-                Files.copy(avatar, destinationPath);
+                trainer.setAvatar(is.readAllBytes());
+                repository.update(trainer);
             } catch (IOException ex) {
                 throw new IllegalStateException(ex);
             }
         });
-
     }
 
-    public void updateAvatar(UUID id, InputStream avatar, String pathToAvatars) {
-        repository.find(id).ifPresent(user -> {
+    public void deleteAvatar(UUID id) {
+        repository.find(id).ifPresent(trainer -> {
+                trainer.setAvatar(null);
+                repository.update(trainer);
+        });
+    }
+
+    public void updateAvatar(UUID id, InputStream is) {
+        repository.find(id).ifPresent(trainer -> {
             try {
-                Path existingPath = Path.of(pathToAvatars, id.toString() + ".png");
-                if (Files.exists(existingPath)) {
-                    Files.copy(avatar, existingPath, StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    throw new NotFoundException("User avatar not found, to create avatar use PUT method");
+                byte[] newAvatar = is.readAllBytes();
+                if (Arrays.equals(trainer.getAvatar(), newAvatar)) {
+                    throw new BadRequestException("The same avatar already exists.");
                 }
+                trainer.setAvatar(newAvatar);
+                repository.update(trainer);
             } catch (IOException ex) {
                 throw new IllegalStateException(ex);
             }
         });
-
     }
 
 

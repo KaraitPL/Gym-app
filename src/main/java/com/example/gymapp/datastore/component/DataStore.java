@@ -9,10 +9,7 @@ import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log
@@ -115,6 +112,14 @@ public class DataStore {
         }
     }
 
+    /*private Gym.Member convertToDTO(Member member) {
+        Gym.Member member2 = new Gym.Member();
+        member2.setId(member.getId());
+        member2.setName(member.getName());
+        member2.setBenchPressMax(member.getBenchPressMax());
+        return member2;
+    }*/
+
     private Member cloneWithRelationships(Member value) {
         Member entity = cloningUtility.clone(value);
 
@@ -126,10 +131,18 @@ public class DataStore {
         }
 
         if (entity.getGym() != null) {
-            entity.setGym(gyms.stream()
-                    .filter(gym -> gym.getId().equals(value.getGym().getId()))
+            Gym gym = gyms.stream()
+                    .filter(g -> g.getId().equals(value.getGym().getId()))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("No gym with id \"%s\".".formatted(value.getGym().getId()))));
+                    .orElseThrow(() -> new IllegalArgumentException("No gym with id \"%s\".".formatted(value.getGym().getId())));
+
+            entity.setGym(gym);
+
+            if (gym.getMembers() == null) {
+                gym.setMembers(new ArrayList<Member>());
+            }
+            gym.getMembers().add(entity);
+
         }
 
         return entity;

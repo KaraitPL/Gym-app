@@ -6,7 +6,6 @@ import com.example.gymapp.gym.repository.api.GymRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,4 +29,5 @@ public class GymService {
     public void delete(UUID id) { repository.delete(repository.find(id).orElseThrow(NotFoundException::new)); }
 
     public void update(Gym gym) { repository.update(gym); }
+
 }

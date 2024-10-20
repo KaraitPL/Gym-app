@@ -8,6 +8,7 @@ import com.example.gymapp.trainer.dto.GetTrainerResponse;
 import com.example.gymapp.trainer.dto.GetTrainersResponse;
 import com.example.gymapp.trainer.dto.PatchTrainerRequest;
 import com.example.gymapp.trainer.dto.PutTrainerRequest;
+import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.service.TrainerService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -73,30 +74,16 @@ public class TrainerSimpleController implements TrainerController {
     }
 
     @Override
-    public byte[] getTrainerAvatar(UUID id, String pathToAvatars) {
-        Path pathToAvatar = Paths.get(
-                pathToAvatars,
-                trainerService.find(id)
-                        .map(trainer -> trainer.getId().toString())
-                        .orElseThrow(() -> new NotFoundException("Trainer does not exist"))
-                        + ".png"
-        );
-        try {
-            if (!Files.exists(pathToAvatar)) {
-                throw new NotFoundException("Trainer avatar does not exist");
-            }
-            return Files.readAllBytes(pathToAvatar);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public byte[] getTrainerAvatar(UUID id) {
+        return trainerService.find(id)
+                .map(Trainer::getAvatar)
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public void putTrainerAvatar(UUID id, InputStream avatar, String pathToAvatars) {
+    public void putTrainerAvatar(UUID id, InputStream avatar) {
         trainerService.find(id).ifPresentOrElse(
-                trainer -> {
-                    trainerService.createAvatar(id, avatar, pathToAvatars);
-                },
+                entity -> trainerService.createAvatar(id, avatar),
                 () -> {
                     throw new NotFoundException();
                 }
@@ -104,33 +91,24 @@ public class TrainerSimpleController implements TrainerController {
     }
 
     @Override
-    public void deleteTrainerAvatar(UUID id, String pathToAvatars) {
+    public void deleteTrainerAvatar(UUID id) {
         trainerService.find(id).ifPresentOrElse(
-                trainer -> {
-                    try {
-                        Path avatarPath = Paths.get(pathToAvatars, trainer.getId().toString() + ".png");
-                        if (!Files.exists(avatarPath)) {
-                            throw new NotFoundException("Trainer avatar does not exist");
-                        }
-                        Files.delete(avatarPath);
-                    } catch (IOException e) {
-                        throw new NotFoundException(e);
-                    }
-                },
+                entity -> trainerService.deleteAvatar(id),
                 () -> {
-                    throw new NotFoundException("Trainer does not exist");
+                    throw new NotFoundException();
                 }
         );
     }
 
     @Override
-    public void patchTrainerAvatar(UUID id, InputStream avatar, String pathToAvatars) {
+    public void patchTrainerAvatar(UUID id, InputStream avatar) {
         trainerService.find(id).ifPresentOrElse(
-                trainer -> trainerService.updateAvatar(id, avatar, pathToAvatars),
+                entity -> trainerService.updateAvatar(id, avatar),
                 () -> {
-                    throw new NotFoundException("Trainer does not exist");
+                    throw new NotFoundException();
                 }
         );
     }
+
 
 }

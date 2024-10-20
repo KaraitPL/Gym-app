@@ -3,6 +3,7 @@ package com.example.gymapp.gym.dto.function;
 import com.example.gymapp.gym.dto.GetGymResponse;
 import com.example.gymapp.gym.entity.Gym;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Function;
@@ -16,15 +17,15 @@ public class GymToResponseFunction implements Function<Gym, GetGymResponse> {
                 .name(entity.getName())
                 .numberOfEquipment(entity.getNumberOfEquipment())
                 .gymType(entity.getGymType())
-                /*.members(Optional.ofNullable(entity.getMembers())
-                        .orElse(Collections.emptyList())  // Zwraca pustą listę, jeśli members jest null
+                .members(Optional.ofNullable(entity.getMembers())
+                        .orElse(new ArrayList<>())  // Zwraca pustą listę, jeśli members jest null
                         .stream()
                         .map(member -> GetGymResponse.Member.builder()
                                 .id(member.getId())
                                 .name(member.getName())
                                 .benchPressMax(member.getBenchPressMax())
                                 .build())
-                        .collect(Collectors.toList()))*/
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
