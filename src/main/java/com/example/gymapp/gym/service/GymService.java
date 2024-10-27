@@ -3,6 +3,8 @@ package com.example.gymapp.gym.service;
 import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
+import com.example.gymapp.member.entity.Member;
+import com.example.gymapp.member.service.MemberService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,14 @@ import java.util.UUID;
 @NoArgsConstructor(force = true)
 public class GymService {
     private final GymRepository repository;
+    private final MemberService memberService;
 
     @Inject
-    public GymService(GymRepository gymRepository) { this.repository = gymRepository; }
+    public GymService(GymRepository gymRepository, MemberService memberService)
+    {
+        this.repository = gymRepository;
+        this.memberService = memberService;
+    }
 
     public Optional<Gym> find(UUID id) { return repository.find(id); }
 
@@ -26,7 +33,19 @@ public class GymService {
 
     public void create(Gym gym) { repository.create(gym); }
 
-    public void delete(UUID id) { repository.delete(repository.find(id).orElseThrow(NotFoundException::new)); }
+    public void delete(UUID id)
+    {
+        Gym gym = repository.find(id).orElseThrow(NotFoundException::new);
+        Optional<List<Member>> membersToDelete = memberService.findAllByGym(id);
+        membersToDelete.ifPresent(members -> members.forEach(member -> {
+            memberService.delete(member.getId());
+        }));
+
+        membersToDelete.ifPresent(units -> {
+
+        });
+
+        repository.delete(gym); }
 
     public void update(Gym gym) { repository.update(gym); }
 

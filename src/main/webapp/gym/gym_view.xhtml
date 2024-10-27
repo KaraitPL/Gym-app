@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{gymView.id}" required="true"/>
+        <f:viewAction action="#{gymView.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <header>
+            <h2>
+                <h:outputText value="#{gymView.gym.name}"/>
+            </h2>
+        </header>
+        <main>
+            <div>
+                Gym type:
+                <h:outputText value="#{gymView.gym.gymType}"/>
+            </div>
+            <div>
+                Number of equipment:
+                <h:outputText value="#{gymView.gym.numberOfEquipment}"/>
+            </div>
+            <div>Members:</div>
+            <ui:repeat layout="unorderedList" value="#{gymView.gym.members}" var="member">
+                <li style="display: flex">
+                    <h:link outcome="/member/member_view.xhtml">
+                        <h:outputText value="#{member.name}"/>
+                        <f:param name="id" value="#{member.id}"/>
+                    </h:link>
+                    <h:form>
+                        <h:commandButton class="button" value="Delete member" action="#{gymView.deleteMember(member.id)}"/>
+                    </h:form>
+                </li>
+            </ui:repeat>
+        </main>
+    </ui:define>
+</ui:composition>

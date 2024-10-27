@@ -61,7 +61,8 @@ public class MemberSimpleController implements MemberController {
     @Override
     public void putMember(UUID id, PutMemberRequest request) {
         try{
-            service.create(factory.requestToMember().apply(id, request));
+            Member member = factory.requestToMember().apply(id, request);
+            service.create(member, request.getTrainer(), request.getGym());
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException(ex);
         }
@@ -69,7 +70,7 @@ public class MemberSimpleController implements MemberController {
 
     @Override
     public void patchMember(UUID id, PatchMemberRequest request) {
-        service.find(id).ifPresentOrElse(entity -> service.update(factory.updateMember().apply(entity, request)), () -> {
+        service.find(id).ifPresentOrElse(entity -> service.update(factory.updateMember().apply(entity, request), entity.getGym().getId()), () -> {
             throw new NotFoundException();
         });
     }

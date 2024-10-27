@@ -112,22 +112,21 @@ public class DataStore {
         }
     }
 
-    /*private Gym.Member convertToDTO(Member member) {
-        Gym.Member member2 = new Gym.Member();
-        member2.setId(member.getId());
-        member2.setName(member.getName());
-        member2.setBenchPressMax(member.getBenchPressMax());
-        return member2;
-    }*/
-
     private Member cloneWithRelationships(Member value) {
         Member entity = cloningUtility.clone(value);
 
         if (entity.getTrainer() != null) {
-            entity.setTrainer(trainers.stream()
-                    .filter(trainer -> trainer.getId().equals(value.getTrainer().getId()))
+            Trainer trainer = trainers.stream()
+                    .filter(t -> t.getId().equals(value.getTrainer().getId()))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("No trainer with id \"%s\".".formatted(value.getTrainer().getId()))));
+                    .orElseThrow(() -> new IllegalArgumentException("No trainer with id \"%s\".".formatted(value.getTrainer().getId())));
+
+            entity.setTrainer(trainer);
+
+            if (trainer.getMembers() == null) {
+                trainer.setMembers(new ArrayList<Member>());
+            }
+            trainer.getMembers().add(entity);
         }
 
         if (entity.getGym() != null) {
@@ -136,12 +135,8 @@ public class DataStore {
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("No gym with id \"%s\".".formatted(value.getGym().getId())));
 
-            entity.setGym(gym);
 
-            if (gym.getMembers() == null) {
-                gym.setMembers(new ArrayList<Member>());
-            }
-            gym.getMembers().add(entity);
+            entity.setGym(gym);
 
         }
 

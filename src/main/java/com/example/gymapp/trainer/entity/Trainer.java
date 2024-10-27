@@ -1,10 +1,12 @@
 package com.example.gymapp.trainer.entity;
 
+import com.example.gymapp.member.entity.Member;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
@@ -24,4 +26,8 @@ public class Trainer implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private byte[] avatar;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Member> members;
 }

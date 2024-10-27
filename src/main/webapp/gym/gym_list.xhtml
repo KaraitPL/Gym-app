@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <ui:define name="content">
+        <article class="text--justified">
+            <header><h2>Gyms:</h2></header>
+            <h:dataTable value="#{gymList.gyms.gyms}" var="gym">
+                <h:column>
+                    <h:link outcome="/gym/gym_view.xhtml">
+                        <h:outputText value="#{gym.name}"/>
+                        <f:param name="id" value="#{gym.id}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <h:form>
+                        <h:commandButton class="button" value="Delete"
+                                         action="#{gymList.deleteAction(gym)}"/>
+                    </h:form>
+                </h:column>
+            </h:dataTable>
+        </article>
+    </ui:define>
+</ui:composition>

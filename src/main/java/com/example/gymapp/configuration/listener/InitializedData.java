@@ -142,10 +142,10 @@ public class InitializedData {
                 .trainer(trainerDavid)
                 .build();
 
-        memberService.create(memberOskar);
-        memberService.create(memberMarcin);
-        memberService.create(memberAntoni);
-        memberService.create(memberIgnacy);
+        memberService.create(memberOskar, trainerArnold.getId(), muscleGym.getId());
+        memberService.create(memberMarcin, trainerRonnie.getId(), streetWorkoutPark.getId());
+        memberService.create(memberAntoni, trainerZyzz.getId(), goldGym.getId());
+        memberService.create(memberIgnacy, trainerDavid.getId(), muscleGym.getId());
 
         requestContextController.deactivate();
     }

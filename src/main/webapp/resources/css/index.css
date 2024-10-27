@@ -1,0 +1,93 @@
+/* Ogólne ustawienia */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1b1f3b; /* Ciemny niebieski tło */
+    color: #000000; /* Jasny niebieski kolor tekstu */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Nagłówek strony */
+.main-header {
+    background-color: #4a7cba; /* Miodowy niebieski */
+    padding: 20px 0;
+    text-align: center;
+    color: #ffffff; /* Biały */
+}
+
+.header-content h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #c9daf8; /* Jasny, pastelowy niebieski */
+}
+
+/* Nawigacja */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0066cc; /* Intensywny niebieski */
+    padding: 10px 20px;
+}
+
+.brand-logo img {
+    height: 50px;
+    width: 50px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+.nav-menu li a {
+    color: #ffffff; /* Biały */
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+    color: #c9daf8; /* Jasny, pastelowy niebieski */
+}
+
+/* Główna sekcja */
+.main-section {
+    padding: 20px;
+    max-width: 100%; /* Umożliwia zajęcie całej szerokości */
+    margin: 0; /* Usuwa margines */
+    background-color: #FFFFFF; /* Ciemny niebieski */
+    border-radius: 0; /* Usuwa zaokrąglenia */
+    box-shadow: none; /* Usuwa cień */
+    flex-grow: 1;
+    text-align: left; /* Wyrównanie tekstu do lewej */
+}
+
+.section-header {
+    text-align: left; /* Wyrównanie nagłówka do lewej */
+    color: #000000;
+}
+
+.section-content blockquote {
+    font-style: italic;
+    background-color: #e6f7ff; /* Jasny niebieski */
+    color: #1b1f3b; /* Ciemny niebieski */
+    padding: 10px;
+    border-left: 5px solid #4a7cba; /* Miodowy niebieski */
+    margin: 20px 0;
+}
+
+/* Stopka */
+.site-footer {
+    background-color: #4a7cba; /* Miodowy niebieski */
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+    color: #ffffff; /* Biały */
+    margin-top: auto;
+}
