@@ -59,6 +59,10 @@ GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-0000000000
 
 GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000007
 
+### Get All Members
+
+GET http://localhost:9080/gym-app/api/members
+
 #### Create Member
 
 PUT http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
@@ -85,10 +89,6 @@ Content-Type: application/json
 ### Delete Member
 
 DELETE http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
-
-### Get All Members
-
-GET http://localhost:9080/gym-app/api/members
 
 ### Get Trainer Members
 

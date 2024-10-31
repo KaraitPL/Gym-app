@@ -1,8 +1,6 @@
 package com.example.gymapp.trainer.controller.simple;
 
 import com.example.gymapp.component.DtoFunctionFactory;
-import com.example.gymapp.controller.servlet.exception.BadRequestException;
-import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.trainer.controller.api.TrainerController;
 import com.example.gymapp.trainer.dto.GetTrainerResponse;
 import com.example.gymapp.trainer.dto.GetTrainersResponse;
@@ -12,6 +10,7 @@ import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.service.TrainerService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +36,7 @@ public class TrainerSimpleController implements TrainerController {
     public GetTrainerResponse getTrainer(UUID id) {
         return trainerService.find(id)
                 .map(factory.trainerToResponse())
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Trainer not found"));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class TrainerSimpleController implements TrainerController {
         try {
             trainerService.create(factory.requestToTrainer().apply(id, request));
         } catch (IllegalArgumentException ex) {
-            throw new BadRequestException(ex);
+            throw new IllegalArgumentException(ex.getMessage());
         }
 
     }

@@ -1,6 +1,5 @@
 package com.example.gymapp.member.service;
 
-import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
 import com.example.gymapp.gym.service.GymService;
@@ -11,6 +10,7 @@ import com.example.gymapp.trainer.repository.api.TrainerRepository;
 import com.example.gymapp.trainer.service.TrainerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;

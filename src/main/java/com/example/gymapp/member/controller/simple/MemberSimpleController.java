@@ -75,7 +75,7 @@ public class MemberSimpleController implements MemberController {
             service.create(member, request.getTrainer(), request.getGym());
 
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
-                    .path(MemberController.class, "getUnit")
+                    .path(MemberController.class, "getMember")
                     .build(id)
                     .toString());
         } catch (IllegalArgumentException ex) {

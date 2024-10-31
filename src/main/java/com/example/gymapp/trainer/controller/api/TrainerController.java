@@ -4,21 +4,35 @@ import com.example.gymapp.trainer.dto.GetTrainerResponse;
 import com.example.gymapp.trainer.dto.GetTrainersResponse;
 import com.example.gymapp.trainer.dto.PatchTrainerRequest;
 import com.example.gymapp.trainer.dto.PutTrainerRequest;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 
 import java.io.InputStream;
 import java.util.UUID;
 
 public interface TrainerController {
 
-    GetTrainerResponse getTrainer(UUID id);
+    @GET
+    @Path("/trainers/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetTrainerResponse getTrainer(@PathParam("id") UUID id);
 
+    @GET
+    @Path("/trainers")
+    @Produces(MediaType.APPLICATION_JSON)
     GetTrainersResponse getTrainers();
 
-    void putTrainer(UUID id, PutTrainerRequest request);
+    @PUT
+    @Path("/trainers/{id}")
+    void putTrainer(@PathParam("id") UUID id, PutTrainerRequest request);
 
-    void patchTrainer(UUID id, PatchTrainerRequest request);
+    @PATCH
+    @Path("/trainers/{id}")
+    void patchTrainer(@PathParam("id") UUID id, PatchTrainerRequest request);
 
-    void deleteTrainer(UUID id);
+    @DELETE
+    @Path("/trainers/{id}")
+    void deleteTrainer(@PathParam("id") UUID id);
 
     byte[] getTrainerAvatar(UUID id);
 
