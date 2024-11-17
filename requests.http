@@ -65,19 +65,18 @@ GET http://localhost:9080/gym-app/api/members
 
 #### Create Member
 
-PUT http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000005
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000004/members/00000000-0000-0000-0002-000000000005
 Content-Type: application/json
 
 {
   "name": "Pawel",
   "benchPressMax": "40",
-  "trainer": "00000000-0000-0000-0000-000000000001",
-  "gym": "00000000-0000-0000-0001-000000000001"
+  "trainer": "00000000-0000-0000-0000-000000000001"
 }
 
 ### Update Member
 
-PATCH http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+PATCH http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000001
 Content-Type: application/json
 
 {
@@ -119,7 +118,7 @@ Content-Type: application/json
 
 ### Get Gym Members
 
-GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000001/members
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members
 
 ### Update Gym
 

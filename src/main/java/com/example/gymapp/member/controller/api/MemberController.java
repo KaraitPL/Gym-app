@@ -31,12 +31,12 @@ public interface MemberController {
     GetMembersResponse getMembers();
 
     @PUT
-    @Path("/members/{id}")
-    void putMember(@PathParam("id") UUID id, PutMemberRequest request);
+    @Path("gyms/{gymId}/members/{id}")
+    void putMember(@PathParam("id") UUID id, PutMemberRequest request, @PathParam("gymId") UUID gymId);
 
     @PATCH
-    @Path("/members/{id}")
-    void patchMember(@PathParam("id") UUID id, PatchMemberRequest request);
+    @Path("gyms/{gymId}/members/{id}")
+    void patchMember(@PathParam("id") UUID id, PatchMemberRequest request, @PathParam("gymId") UUID gymId);
 
     @DELETE
     @Path("/members/{id}")

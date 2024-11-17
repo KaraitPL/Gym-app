@@ -68,7 +68,7 @@ public class MemberSimpleController implements MemberController {
         return factory.membersToResponse().apply(service.findAll());
     }
 
-    @Override
+    /*@Override
     public void putMember(UUID id, PutMemberRequest request) {
         try{
             Member member = factory.requestToMember().apply(id, request);
@@ -81,11 +81,26 @@ public class MemberSimpleController implements MemberController {
         } catch (IllegalArgumentException ex) {
             throw new NotAllowedException("Member already exists");
         }
+    }*/
+
+    @Override
+    public void putMember(UUID id, PutMemberRequest request, UUID gymId) {
+        try{
+            Member member = factory.requestToMember().apply(id, request);
+            service.create(member, request.getTrainer(), gymId);
+
+            response.setHeader("Location", uriInfo.getBaseUriBuilder()
+                    .path(MemberController.class, "getMember")
+                    .build(id)
+                    .toString());
+        } catch (IllegalArgumentException ex) {
+            throw new NotAllowedException("Member already exists");
+        }
     }
 
     @Override
-    public void patchMember(UUID id, PatchMemberRequest request) {
-        service.find(id).ifPresentOrElse(entity -> service.update(factory.updateMember().apply(entity, request), entity.getGym().getId()), () -> {
+    public void patchMember(UUID id, PatchMemberRequest request, UUID gymId) {
+        service.findByGymAndMember(gymId, id).ifPresentOrElse(entity -> service.update(factory.updateMember().apply(entity, request), entity.getGym().getId()), () -> {
             throw new NotFoundException("Member not found");
         });
     }
