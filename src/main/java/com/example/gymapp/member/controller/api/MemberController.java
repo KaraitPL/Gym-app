@@ -39,6 +39,6 @@ public interface MemberController {
     void patchMember(@PathParam("id") UUID id, PatchMemberRequest request, @PathParam("gymId") UUID gymId);
 
     @DELETE
-    @Path("/members/{id}")
-    void deleteMember(@PathParam("id") UUID id);
+    @Path("gyms/{gymId}/members/{id}")
+    void deleteMember(@PathParam("id") UUID id, @PathParam("gymId") UUID gymId);
 }

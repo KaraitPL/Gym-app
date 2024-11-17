@@ -106,8 +106,8 @@ public class MemberSimpleController implements MemberController {
     }
 
     @Override
-    public void deleteMember(UUID id) {
-        service.find(id).ifPresentOrElse(entity -> service.delete(id), () -> {
+    public void deleteMember(UUID id, UUID gymId) {
+        service.findByGymAndMember(gymId, id).ifPresentOrElse(entity -> service.delete(id), () -> {
             throw new NotFoundException("Member not found");
         });
     }

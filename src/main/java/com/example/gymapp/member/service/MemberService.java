@@ -10,6 +10,7 @@ import com.example.gymapp.trainer.repository.api.TrainerRepository;
 import com.example.gymapp.trainer.service.TrainerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
@@ -60,10 +61,11 @@ public class MemberService {
 
     public Optional<Member> find(UUID id) { return memberRepository.find(id); }
 
-    public Optional<Member> find(String name) { return  memberRepository.findByName(name); }
+/*    public Optional<Member> find(String name) { return  memberRepository.findByName(name); }*/
 
     public List<Member> findAll() { return memberRepository.findAll(); }
 
+    @Transactional
     public void create(Member member, UUID trainerId, UUID gymId) {
         Trainer trainer = trainerService.find(trainerId).orElseThrow(() -> new NotFoundException("Trainer not found: " + trainerId));
 
@@ -86,6 +88,7 @@ public class MemberService {
         gymService.update(gym);
     }
 
+    @Transactional
     public void update(Member member, UUID initialGym) {
         Trainer trainer = trainerService.find(member.getTrainer().getId())
                 .orElseThrow(() -> new NotFoundException("Trainer not found: " + member.getTrainer().getId()));
@@ -119,6 +122,7 @@ public class MemberService {
         memberRepository.update(member);
     }
 
+    @Transactional
     public void delete(UUID id)
     {
         Member member = memberRepository.find(id).orElseThrow(NotFoundException::new);

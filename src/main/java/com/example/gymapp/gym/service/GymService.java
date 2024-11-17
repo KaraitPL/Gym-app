@@ -6,6 +6,7 @@ import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.service.MemberService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import java.util.List;
@@ -27,12 +28,14 @@ public class GymService {
 
     public Optional<Gym> find(UUID id) { return repository.find(id); }
 
-    public Optional<Gym> find(String name) { return repository.findByName(name); }
+    /*public Optional<Gym> find(String name) { return repository.findByName(name); }*/
 
     public List<Gym> findAll() { return repository.findAll(); }
 
+    @Transactional
     public void create(Gym gym) { repository.create(gym); }
 
+    @Transactional
     public void delete(UUID id)
     {
         Gym gym = repository.find(id).orElseThrow(() -> new NotFoundException("Gym not found"));
@@ -41,12 +44,9 @@ public class GymService {
             memberService.delete(member.getId());
         }));
 
-        membersToDelete.ifPresent(units -> {
-
-        });
-
         repository.delete(gym); }
 
+    @Transactional
     public void update(Gym gym) { repository.update(gym); }
 
 }

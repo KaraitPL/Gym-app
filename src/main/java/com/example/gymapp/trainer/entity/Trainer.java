@@ -1,6 +1,7 @@
 package com.example.gymapp.trainer.entity;
 
 import com.example.gymapp.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,7 +18,10 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
+@Entity
+@Table(name = "trainers")
 public class Trainer implements Serializable {
+    @Id
     private UUID id;
     private String name;
     private int yearsOfTraining;
@@ -29,5 +33,6 @@ public class Trainer implements Serializable {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.REMOVE)
     private List<Member> members;
 }

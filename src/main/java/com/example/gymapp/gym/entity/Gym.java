@@ -1,6 +1,7 @@
 package com.example.gymapp.gym.entity;
 
 import com.example.gymapp.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,11 +14,12 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode
-
+@Entity
+@Table(name = "gyms")
 public class Gym implements Serializable {
-
+    @Id
     private UUID id;
     private String name;
     private GymType gymType;
@@ -25,5 +27,6 @@ public class Gym implements Serializable {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @OneToMany(mappedBy = "gym", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Member> members;
 }

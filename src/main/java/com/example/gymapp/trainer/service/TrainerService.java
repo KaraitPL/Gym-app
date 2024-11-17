@@ -5,6 +5,7 @@ import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.repository.api.TrainerRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
@@ -41,14 +42,17 @@ public class TrainerService {
         return repository.findAll();
     }
 
+    @Transactional
     public void create(Trainer trainer){
         repository.create(trainer);
     }
 
+    @Transactional
     public void update(Trainer trainer){
         repository.update(trainer);
     }
 
+    @Transactional
     public void delete(UUID id){
         repository.delete(repository.find(id).orElseThrow(() -> new NotFoundException("Trainer not found")));
     }

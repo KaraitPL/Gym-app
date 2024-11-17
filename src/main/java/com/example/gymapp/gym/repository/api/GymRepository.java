@@ -8,5 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GymRepository extends Repository<Gym, UUID> {
-    Optional<Gym> findByName(String name);
+/*    Optional<Gym> findByName(String name);*/
 }

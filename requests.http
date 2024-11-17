@@ -95,7 +95,7 @@ GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000
 
 ### Get One Gym
 
-GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000004
 
 ### Get One Gym (Doesn't exist)
 
@@ -118,7 +118,7 @@ Content-Type: application/json
 
 ### Get Gym Members
 
-GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000004/members
 
 ### Update Gym
 
