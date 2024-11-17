@@ -5,20 +5,34 @@ import com.example.gymapp.gym.dto.GetGymsResponse;
 import com.example.gymapp.gym.dto.PatchGymRequest;
 import com.example.gymapp.gym.dto.PutGymRequest;
 import com.example.gymapp.member.dto.GetMembersResponse;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 
 import java.util.UUID;
 
 public interface GymController {
 
-    GetGymResponse getGym(UUID id);
+    @GET
+    @Path("/gyms/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetGymResponse getGym(@PathParam("id") UUID id);
 
+    @GET
+    @Path("/gyms")
+    @Produces(MediaType.APPLICATION_JSON)
     GetGymsResponse getGyms();
 
-    void putGym(UUID id, PutGymRequest request);
+    @PUT
+    @Path("/gyms/{id}")
+    void putGym(@PathParam("id") UUID id, PutGymRequest request);
 
-    void patchGym(UUID id, PatchGymRequest request);
+    @PATCH
+    @Path("/gyms/{id}")
+    void patchGym(@PathParam("id") UUID id, PatchGymRequest request);
 
-    void deleteGym(UUID id);
+    @DELETE
+    @Path("/gyms/{id}")
+    void deleteGym(@PathParam("id") UUID id);
 
 
 

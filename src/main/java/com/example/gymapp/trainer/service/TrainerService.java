@@ -1,13 +1,11 @@
 package com.example.gymapp.trainer.service;
 
-import com.example.gymapp.controller.servlet.exception.AlreadyExistsException;
-import com.example.gymapp.controller.servlet.exception.BadRequestException;
-import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.repository.api.TrainerRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
@@ -52,14 +50,14 @@ public class TrainerService {
     }
 
     public void delete(UUID id){
-        repository.delete(repository.find(id).orElseThrow(NotFoundException::new));
+        repository.delete(repository.find(id).orElseThrow(() -> new NotFoundException("Trainer not found")));
     }
 
     public void createAvatar(UUID id, InputStream is) {
         repository.find(id).ifPresent(trainer -> {
             try {
                 if (trainer.getAvatar() != null) {
-                    throw new BadRequestException("Already exists");
+                    throw new IllegalArgumentException("Already exists");
                 }
                 trainer.setAvatar(is.readAllBytes());
                 repository.update(trainer);
@@ -81,7 +79,7 @@ public class TrainerService {
             try {
                 byte[] newAvatar = is.readAllBytes();
                 if (Arrays.equals(trainer.getAvatar(), newAvatar)) {
-                    throw new BadRequestException("The same avatar already exists.");
+                    throw new IllegalArgumentException("The same avatar already exists.");
                 }
                 trainer.setAvatar(newAvatar);
                 repository.update(trainer);

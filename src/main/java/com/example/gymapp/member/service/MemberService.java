@@ -1,6 +1,5 @@
 package com.example.gymapp.member.service;
 
-import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
 import com.example.gymapp.gym.service.GymService;
@@ -11,6 +10,7 @@ import com.example.gymapp.trainer.repository.api.TrainerRepository;
 import com.example.gymapp.trainer.service.TrainerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -50,6 +50,14 @@ public class MemberService {
                 .map(memberRepository::findAllByGym);
     }
 
+    public Optional<Member> findByGymAndMember(UUID gymId, UUID memberId){
+        Gym gym = gymService.find(gymId)
+                .orElseThrow(() -> new NotFoundException("Gym not found: " + gymId));
+
+        return memberRepository.find(memberId)
+                .filter(member -> member.getGym().getId().equals(gym.getId()));
+    }
+
     public Optional<Member> find(UUID id) { return memberRepository.find(id); }
 
     public Optional<Member> find(String name) { return  memberRepository.findByName(name); }
@@ -60,7 +68,7 @@ public class MemberService {
         Trainer trainer = trainerService.find(trainerId).orElseThrow(() -> new NotFoundException("Trainer not found: " + trainerId));
 
         Gym gym = gymService.find(gymId).orElseThrow(() -> new NotFoundException("Gym not found: " + gymId));
-
+        member.setGym(gymService.find(gymId).get());
         memberRepository.create(member);
 
         if(trainer.getMembers() == null)

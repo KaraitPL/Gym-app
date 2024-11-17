@@ -1,12 +1,12 @@
 package com.example.gymapp.gym.service;
 
-import com.example.gymapp.controller.servlet.exception.NotFoundException;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.service.MemberService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class GymService {
 
     public void delete(UUID id)
     {
-        Gym gym = repository.find(id).orElseThrow(NotFoundException::new);
+        Gym gym = repository.find(id).orElseThrow(() -> new NotFoundException("Gym not found"));
         Optional<List<Member>> membersToDelete = memberService.findAllByGym(id);
         membersToDelete.ifPresent(members -> members.forEach(member -> {
             memberService.delete(member.getId());
