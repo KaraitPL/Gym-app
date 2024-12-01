@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "members")
 @Entity
 @Table(name = "gyms")
 public class Gym implements Serializable {
@@ -25,7 +25,7 @@ public class Gym implements Serializable {
     private GymType gymType;
     private Integer numberOfEquipment;
 
-    @EqualsAndHashCode.Exclude
+
     @ToString.Exclude
     @OneToMany(mappedBy = "gym", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Member> members;

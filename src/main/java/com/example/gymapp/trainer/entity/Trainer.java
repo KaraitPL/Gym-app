@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "members")
 @Entity
 @Table(name = "trainers")
 public class Trainer implements Serializable {
@@ -28,11 +28,15 @@ public class Trainer implements Serializable {
     private LocalDate birthDate;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private byte[] avatar;
+    private String password;
 
-    @EqualsAndHashCode.Exclude
+    @CollectionTable(name = "users__roles", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
+
+
     @ToString.Exclude
-    @OneToMany(mappedBy = "trainer", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Member> members;
 }

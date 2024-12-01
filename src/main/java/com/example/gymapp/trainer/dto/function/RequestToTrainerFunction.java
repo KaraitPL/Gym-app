@@ -13,6 +13,7 @@ public class RequestToTrainerFunction implements BiFunction<UUID, PutTrainerRequ
         return Trainer.builder()
                 .id(id)
                 .name(request.getName())
+                .password(request.getPassword())
                 .yearsOfTraining(request.getYearsOfTraining())
                 .birthDate(request.getBirthDate())
                 .build();

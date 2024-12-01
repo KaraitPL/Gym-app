@@ -15,8 +15,8 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor(access =  AccessLevel.PRIVATE)
-@ToString//(callSuper = true)
-@EqualsAndHashCode//(callSuper = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(exclude = "gym")
 @Entity
 @Table(name = "members")
 public class Member implements Serializable {

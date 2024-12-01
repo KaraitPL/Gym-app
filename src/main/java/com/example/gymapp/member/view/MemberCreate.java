@@ -7,6 +7,7 @@ import com.example.gymapp.member.model.MemberCreateModel;
 import com.example.gymapp.member.service.MemberService;
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.service.TrainerService;
+import jakarta.ejb.EJB;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -22,13 +23,13 @@ import java.util.UUID;
 @Named
 public class MemberCreate implements Serializable {
 
-    private final MemberService memberService;
+    private MemberService memberService;
 
     private final ModelFunctionFactory factory;
 
-    private final TrainerService trainerService;
+    private TrainerService trainerService;
 
-    private final GymService gymService;
+    private GymService gymService;
 
     @Setter
     @Getter
@@ -44,10 +45,22 @@ public class MemberCreate implements Serializable {
     private static final UUID TEMP_TRAINER_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
     @Inject
-    public MemberCreate(MemberService memberService, ModelFunctionFactory factory, TrainerService trainerService, GymService gymService) {
-        this.memberService = memberService;
+    public MemberCreate(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setTrainerService(TrainerService trainerService) {
         this.trainerService = trainerService;
+    }
+
+    @EJB
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @EJB
+    public void setGymService(GymService gymService) {
         this.gymService = gymService;
     }
 

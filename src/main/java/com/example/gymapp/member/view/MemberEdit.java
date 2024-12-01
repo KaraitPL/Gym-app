@@ -6,6 +6,7 @@ import com.example.gymapp.gym.service.GymService;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.model.MemberEditModel;
 import com.example.gymapp.member.service.MemberService;
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -24,11 +25,11 @@ import java.util.UUID;
 @Named
 public class MemberEdit implements Serializable {
 
-    private final MemberService memberService;
+    private MemberService memberService;
 
     private final ModelFunctionFactory factory;
 
-    private final GymService gymService;
+    private GymService gymService;
 
     @Setter
     @Getter
@@ -46,9 +47,17 @@ public class MemberEdit implements Serializable {
     private List<GymModel> gyms;
 
     @Inject
-    public MemberEdit(MemberService memberService, ModelFunctionFactory factory, GymService gymService) {
-        this.memberService = memberService;
+    public MemberEdit(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @EJB
+    public void setGymService(GymService gymService) {
         this.gymService = gymService;
     }
 

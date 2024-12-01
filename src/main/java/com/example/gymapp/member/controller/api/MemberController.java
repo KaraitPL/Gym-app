@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.UUID;
 
+@Path("")
 public interface MemberController {
     @GET
     @Path("/trainers/{id}/members")
@@ -19,6 +20,11 @@ public interface MemberController {
     @Path("/gyms/{id}/members")
     @Produces(MediaType.APPLICATION_JSON)
     GetMembersResponse getGymMembers(@PathParam("id") UUID id);
+
+    @GET
+    @Path("/gyms/{gymId}/members/{memberId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetMemberResponse getGymMember(@PathParam("gymId") UUID gymId, @PathParam("memberId") UUID memberId);
 
     @GET
     @Path("/members/{id}")
@@ -32,13 +38,13 @@ public interface MemberController {
 
     @PUT
     @Path("gyms/{gymId}/members/{id}")
-    void putMember(@PathParam("id") UUID id, PutMemberRequest request, @PathParam("gymId") UUID gymId);
+    void putGymMember(@PathParam("gymId") UUID gymId, @PathParam("id") UUID memberId, PutMemberRequest request);
 
     @PATCH
     @Path("gyms/{gymId}/members/{id}")
-    void patchMember(@PathParam("id") UUID id, PatchMemberRequest request, @PathParam("gymId") UUID gymId);
+    void patchGymMember(@PathParam("gymId") UUID gymId, @PathParam("id") UUID id, PatchMemberRequest request);
 
     @DELETE
     @Path("gyms/{gymId}/members/{id}")
-    void deleteMember(@PathParam("id") UUID id, @PathParam("gymId") UUID gymId);
+    void deleteGymMember(@PathParam("gymId") UUID gymId, @PathParam("id") UUID id);
 }

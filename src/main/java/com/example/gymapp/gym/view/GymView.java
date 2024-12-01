@@ -5,6 +5,7 @@ import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.model.GymModel;
 import com.example.gymapp.gym.service.GymService;
 import com.example.gymapp.member.service.MemberService;
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -21,11 +22,11 @@ import java.util.UUID;
 @ViewScoped
 @Named
 public class GymView implements Serializable {
-    private final GymService gymService;
+    private GymService gymService;
 
     private final ModelFunctionFactory factory;
 
-    private final MemberService memberService;
+    private MemberService memberService;
 
     @Setter
     @Getter
@@ -35,9 +36,17 @@ public class GymView implements Serializable {
     private GymModel gym;
 
     @Inject
-    public GymView(GymService gymService, ModelFunctionFactory factory, MemberService memberService) {
-        this.gymService = gymService;
+    public GymView(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setGymService(GymService gymService) {
+        this.gymService = gymService;
+    }
+
+    @EJB
+    public void setMemberService(MemberService memberService) {
         this.memberService = memberService;
     }
 
@@ -50,8 +59,8 @@ public class GymView implements Serializable {
         }
     }
 
-    public String deleteMember(UUID userId) {
-        memberService.delete(userId);
+    public String deleteMember(UUID trainerId) {
+        memberService.delete(trainerId);
         String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
         return viewId + "?faces-redirect=true&includeViewParams=true";
     }

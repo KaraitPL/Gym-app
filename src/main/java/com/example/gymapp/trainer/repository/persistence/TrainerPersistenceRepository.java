@@ -2,6 +2,7 @@ package com.example.gymapp.trainer.repository.persistence;
 
 import com.example.gymapp.trainer.entity.Trainer;
 import com.example.gymapp.trainer.repository.api.TrainerRepository;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestScoped
+@Dependent
 public class TrainerPersistenceRepository implements TrainerRepository {
     private EntityManager em;
 

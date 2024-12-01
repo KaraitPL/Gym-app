@@ -15,7 +15,7 @@ public interface MemberRepository extends Repository<Member, UUID> {
 
     List<Member> findAllByGym(Gym gym);
 
-/*    Optional<Member> findByName(String name);*/
+    Optional<Member> findByIdAndTrainer(UUID id, Trainer trainer);
 
 }
 

@@ -1,4 +1,4 @@
-package com.example.gymapp.configuration.listener;
+package com.example.gymapp.configuration;
 
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.entity.GymType;
@@ -6,57 +6,67 @@ import com.example.gymapp.gym.service.GymService;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.service.MemberService;
 import com.example.gymapp.trainer.entity.Trainer;
+import com.example.gymapp.trainer.entity.TrainerRoles;
 import com.example.gymapp.trainer.service.TrainerService;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.context.control.RequestContextController;
-import jakarta.enterprise.event.Observes;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.DeclareRoles;
+import jakarta.annotation.security.RunAs;
+import jakarta.ejb.*;
 import jakarta.inject.Inject;
-import jakarta.servlet.ServletContextEvent;
+import jakarta.inject.Singleton;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-
-import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-@ApplicationScoped
-public class InitializedData {
-    private final MemberService memberService;
+@Singleton
+@Startup
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+@NoArgsConstructor
+@DependsOn("InitializeAdminService")
+@DeclareRoles({TrainerRoles.ADMIN, TrainerRoles.USER})
+@RunAs(TrainerRoles.ADMIN)
+public class InitializedData implements ServletContextListener {
 
-    private final TrainerService trainerService;
-
-    private final GymService gymService;
-
-    private final RequestContextController requestContextController;
+    private TrainerService trainerService;
+    private MemberService memberService;
+    private GymService gymService;
 
     @Inject
-    public InitializedData(
-            MemberService memberService,
-            TrainerService trainerService,
-            GymService gymService,
-            RequestContextController requestContextController
-    ) {
-        this.memberService = memberService;
+    private SecurityContext securityContext;
+
+    @EJB
+    public void setTrainerService(TrainerService trainerService) {
         this.trainerService = trainerService;
+    }
+
+    @EJB
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    @EJB
+    public void setGymService(GymService gymService) {
         this.gymService = gymService;
-        this.requestContextController = requestContextController;
     }
 
-    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        init();
-    }
-
+    @PostConstruct
     @SneakyThrows
     private void init() {
-        requestContextController.activate();
+        System.out.print("Siema 1");
         if (trainerService.find("Arnold Schwarzenegger").isEmpty()) {
+            System.out.print("Siema 2");
             Trainer trainerArnold = Trainer.builder()
                     .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
                     .name("Arnold Schwarzenegger")
                     .yearsOfTraining(60)
+                    .password("arnold")
+                    .members(Collections.emptyList())
+                    .roles(List.of(TrainerRoles.ADMIN, TrainerRoles.USER))
                     .birthDate(LocalDate.of(1947, 7, 30))
                     .build();
 
@@ -64,6 +74,9 @@ public class InitializedData {
                     .id(UUID.fromString("00000000-0000-0000-0000-000000000002"))
                     .name("Ronnie Coleman")
                     .yearsOfTraining(30)
+                    .password("arnold")
+                    .members(Collections.emptyList())
+                    .roles(List.of(TrainerRoles.USER))
                     .birthDate(LocalDate.of(1964, 5, 13))
                     .build();
 
@@ -71,6 +84,9 @@ public class InitializedData {
                     .id(UUID.fromString("00000000-0000-0000-0000-000000000003"))
                     .name("Zyzz")
                     .yearsOfTraining(8)
+                    .password("arnold")
+                    .members(Collections.emptyList())
+                    .roles(List.of(TrainerRoles.USER))
                     .birthDate(LocalDate.of(1989, 3, 24))
                     .build();
 
@@ -78,6 +94,9 @@ public class InitializedData {
                     .id(UUID.fromString("00000000-0000-0000-0000-000000000004"))
                     .name("David Laid")
                     .yearsOfTraining(6)
+                    .password("arnold")
+                    .members(Collections.emptyList())
+                    .roles(List.of(TrainerRoles.USER))
                     .birthDate(LocalDate.of(1998, 1, 29))
                     .build();
 
@@ -91,6 +110,7 @@ public class InitializedData {
                     .name("Gold's Gym")
                     .numberOfEquipment(532)
                     .gymType(GymType.NORMAL)
+                    .members(Collections.emptyList())
                     .build();
 
             Gym muscleGym = Gym.builder()
@@ -98,6 +118,7 @@ public class InitializedData {
                     .name("Muscle Gym")
                     .numberOfEquipment(45)
                     .gymType(GymType.BEACH)
+                    .members(Collections.emptyList())
                     .build();
 
             Gym streetWorkoutPark = Gym.builder()
@@ -105,6 +126,7 @@ public class InitializedData {
                     .name("Street Workout Park")
                     .numberOfEquipment(23)
                     .gymType(GymType.CALISTHENIC)
+                    .members(Collections.emptyList())
                     .build();
 
             gymService.create(goldGym);
@@ -148,11 +170,9 @@ public class InitializedData {
             memberService.create(memberAntoni, trainerZyzz.getId(), goldGym.getId());
             memberService.create(memberIgnacy, trainerDavid.getId(), muscleGym.getId());
         }
-        requestContextController.deactivate();
-
     }
 
-    @SneakyThrows
+    /*@SneakyThrows
     private byte[] getResourceAsByteArray(String name) {
         try (InputStream is = this.getClass().getResourceAsStream(name)) {
             if (is != null) {
@@ -161,7 +181,7 @@ public class InitializedData {
                 throw new IllegalStateException("Unable to get resource %s".formatted(name));
             }
         }
-    }
+    }*/
 
 }
 

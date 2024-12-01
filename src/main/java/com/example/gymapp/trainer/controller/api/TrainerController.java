@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.io.InputStream;
 import java.util.UUID;
 
+@Path("")
 public interface TrainerController {
 
     @GET
@@ -34,12 +35,23 @@ public interface TrainerController {
     @Path("/trainers/{id}")
     void deleteTrainer(@PathParam("id") UUID id);
 
-    byte[] getTrainerAvatar(UUID id);
+    @GET
+    @Path("/trainers/{id}/avatar")
+    @Produces("image/png")
+    byte[] getTrainerAvatar(UUID id, String pathToAvatars);
 
-    void putTrainerAvatar(UUID id, InputStream avatar);
+    @PUT
+    @Path("/trainers/{id}/avatar")
+    @Consumes({MediaType.APPLICATION_JSON})
+    void putTrainerAvatar(UUID id, InputStream avatar, String pathToAvatars);
 
-    void deleteTrainerAvatar(UUID id);
+    @DELETE
+    @Path("/trainers/{id}/avatar")
+    void deleteTrainerAvatar(UUID id, String pathToAvatars);
 
-    void patchTrainerAvatar(UUID id, InputStream avatar);
+    @PATCH
+    @Path("/trainers/{id}/avatar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    void patchTrainerAvatar(UUID id, InputStream avatar, String pathToAvatars);
 
 }

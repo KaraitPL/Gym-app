@@ -16,4 +16,5 @@ public class PutTrainerRequest {
     private String name;
     private int yearsOfTraining;
     private LocalDate birthDate;
+    private String password;
 }

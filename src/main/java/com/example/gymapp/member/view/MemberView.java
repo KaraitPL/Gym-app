@@ -4,6 +4,7 @@ import com.example.gymapp.component.ModelFunctionFactory;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.model.MemberModel;
 import com.example.gymapp.member.service.MemberService;
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @ViewScoped
 @Named
 public class MemberView implements Serializable {
-    private final MemberService memberService;
+    private MemberService memberService;
 
     private final ModelFunctionFactory factory;
 
@@ -32,9 +33,13 @@ public class MemberView implements Serializable {
     private MemberModel member;
 
     @Inject
-    public MemberView(MemberService memberService, ModelFunctionFactory factory) {
-        this.memberService = memberService;
+    public MemberView(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     public void init() throws IOException {

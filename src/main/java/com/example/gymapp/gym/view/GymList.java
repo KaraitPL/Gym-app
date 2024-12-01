@@ -3,6 +3,7 @@ package com.example.gymapp.gym.view;
 import com.example.gymapp.component.ModelFunctionFactory;
 import com.example.gymapp.gym.model.GymsModel;
 import com.example.gymapp.gym.service.GymService;
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -10,7 +11,7 @@ import jakarta.inject.Named;
 @RequestScoped
 @Named
 public class GymList {
-    private final GymService gymService;
+    private GymService gymService;
 
     private final ModelFunctionFactory factory;
 
@@ -18,9 +19,13 @@ public class GymList {
 
 
     @Inject
-    public GymList(GymService gymService, ModelFunctionFactory factory) {
-        this.gymService = gymService;
+    public GymList(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setGymService(GymService gymService) {
+        this.gymService = gymService;
     }
 
     public GymsModel getGyms() {

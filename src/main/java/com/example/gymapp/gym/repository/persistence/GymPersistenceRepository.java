@@ -2,6 +2,9 @@ package com.example.gymapp.gym.repository.persistence;
 
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.gym.repository.api.GymRepository;
+import com.example.gymapp.trainer.entity.TrainerRoles;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -10,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestScoped
+@Dependent
 public class GymPersistenceRepository implements GymRepository {
 
     private EntityManager em;
@@ -25,6 +28,7 @@ public class GymPersistenceRepository implements GymRepository {
         return Optional.ofNullable(em.find(Gym.class, id));
     }
 
+    @RolesAllowed(TrainerRoles.USER)
     @Override
     public List<Gym> findAll() {
         return em.createQuery("select g from Gym g", Gym.class).getResultList();

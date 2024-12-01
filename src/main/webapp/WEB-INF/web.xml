@@ -6,6 +6,14 @@
          metadata-complete="false">
 
     <context-param>
+        <description>Location to store uploaded avatars</description>
+        <param-name>avatars-upload</param-name>
+        <param-value>
+            C:\Avatar
+        </param-value>
+    </context-param>
+
+    <context-param>
         <param-name>jakarta.faces.FACELETS_SKIP_COMMENTS </param-name>
         <param-value>true</param-value>
     </context-param>

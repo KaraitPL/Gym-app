@@ -18,10 +18,12 @@ GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000
 
 PUT http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0001-000000000005
 Content-Type: application/json
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
 {
   "name": "Trener",
   "yearsOfTraining": 3,
+  "password": "siema",
   "birthDate": "1990-05-21"
 }
 
@@ -96,6 +98,7 @@ GET http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0000-000000000
 ### Get One Gym
 
 GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000004
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
 ### Get One Gym (Doesn't exist)
 
@@ -104,6 +107,7 @@ GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000005
 ### Get All Gyms
 
 GET http://localhost:9080/gym-app/api/gyms
+Authorization: Basic QXJub2xkIFNjaHdhcnplbmVnZ2VyOmFybm9sZA==
 
 ### Create Gym
 
@@ -119,6 +123,7 @@ Content-Type: application/json
 ### Get Gym Members
 
 GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000004/members
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
 ### Update Gym
 
@@ -130,3 +135,107 @@ Content-Type: application/json
   "numberOfEquipment": 32,
   "gymType":"NORMAL"
 }
+
+### Get all members
+
+GET http://localhost:9080/gym-app/api/members
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### Get All Gyms
+
+GET http://localhost:9080/gym-app/api/gyms
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+
+### Get One Member
+
+GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### Create Gym
+
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000001
+Content-Type: application/json
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+
+{
+  "name": "Nowa",
+  "numberOfEquipment": 32,
+  "gymType":"NORMAL"
+}
+
+### Get All Trainers
+
+GET http://localhost:9080/gym-app/api/trainers
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+
+//admin-service: YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+//User: Um9ubmllIENvbGVtYW46YXJub2xk
+//Nowy: UGF3ZWw6c2llbWE=
+
+//-------------------------------------------//
+### Create Gym
+// @no-cookie-jar
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002
+Content-Type: application/json
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+{
+  "name": "Nowa",
+  "numberOfEquipment": 32,
+  "gymType":"NORMAL"
+}
+
+### Delete Gym
+// @no-cookie-jar
+DELETE http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+
+### Get All Gyms
+// @no-cookie-jar
+GET http://localhost:9080/gym-app/api/gyms
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+
+### Get all members
+// @no-cookie-jar
+GET http://localhost:9080/gym-app/api/members
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### Get One Member
+// @no-cookie-jar
+GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+#### Create Member
+// @no-cookie-jar
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000001
+Content-Type: application/json
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+{
+  "name": "Pawel",
+  "benchPressMax": "40",
+  "trainer": "00000000-0000-0000-0000-000000000002"
+}
+
+#### Create Trainer
+// @no-cookie-jar
+PUT http://localhost:9080/gym-app/api/trainers/00000000-0000-0000-0001-000000000006
+Content-Type: application/json
+
+{
+  "name": "Trener",
+  "yearsOfTraining": 3,
+  "password": "siema",
+  "birthDate": "1990-05-21"
+}
+
+### Get All Trainers
+// @no-cookie-jar
+GET http://localhost:9080/gym-app/api/trainers
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### Delete Member
+// @no-cookie-jar
+DELETE http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000001
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk

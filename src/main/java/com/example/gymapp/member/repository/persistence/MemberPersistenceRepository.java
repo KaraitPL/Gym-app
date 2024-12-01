@@ -4,15 +4,17 @@ import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.repository.api.MemberRepository;
 import com.example.gymapp.trainer.entity.Trainer;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestScoped
+@Dependent
 public class MemberPersistenceRepository implements MemberRepository {
 
     private EntityManager em;
@@ -37,11 +39,17 @@ public class MemberPersistenceRepository implements MemberRepository {
                 .getResultList();
     }
 
-/*    @Override
-    public Optional<Member> findByName(String name) {
-        return Optional.empty();
-    }*/
-
+    @Override
+    public Optional<Member> findByIdAndTrainer(UUID id, Trainer trainer) {
+        try {
+            return Optional.of(em.createQuery("select c from Member c where c.id = :id and c.trainer = :trainer", Member.class)
+                    .setParameter("trainer", trainer)
+                    .setParameter("id", id)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
+        }
+    }
     @Override
     public Optional<Member> find(UUID id) {
         return Optional.ofNullable(em.find(Member.class, id));
