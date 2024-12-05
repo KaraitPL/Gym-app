@@ -54,7 +54,6 @@ public class TrainerService {
         return repository.findByName(name);
     }
 
-    @RolesAllowed(TrainerRoles.ADMIN)
     public List<Trainer> findAll(){
         return repository.findAll();
     }

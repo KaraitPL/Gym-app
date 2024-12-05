@@ -28,7 +28,6 @@ public class GymPersistenceRepository implements GymRepository {
         return Optional.ofNullable(em.find(Gym.class, id));
     }
 
-    @RolesAllowed(TrainerRoles.USER)
     @Override
     public List<Gym> findAll() {
         return em.createQuery("select g from Gym g", Gym.class).getResultList();

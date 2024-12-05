@@ -42,7 +42,7 @@ public class MemberRestController implements MemberController {
         this.response = response;
     }
     @Inject
-    public MemberRestController(MemberService service, DtoFunctionFactory factory, @SuppressWarnings("CdiInjectionPointsInspection") UriInfo uriInfo) {
+    public MemberRestController(DtoFunctionFactory factory, @SuppressWarnings("CdiInjectionPointsInspection") UriInfo uriInfo) {
         this.factory = factory;
         this.uriInfo = uriInfo;
     }
@@ -93,7 +93,6 @@ public class MemberRestController implements MemberController {
     }
 
 
-    @RolesAllowed(TrainerRoles.USER)
     @Override
     public void putGymMember(UUID gymId, UUID memberId, PutMemberRequest request) {
         try {

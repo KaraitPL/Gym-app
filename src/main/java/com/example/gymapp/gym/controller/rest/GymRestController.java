@@ -32,7 +32,6 @@ public class GymRestController implements GymController {
     private GymService gymService;
     private final DtoFunctionFactory factory;
     private final UriInfo uriInfo;
-
     private HttpServletResponse response;
 
     @Context

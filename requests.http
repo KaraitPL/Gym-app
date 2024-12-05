@@ -208,9 +208,9 @@ Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
 #### Create Member
 // @no-cookie-jar
-PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000001
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000002
 Content-Type: application/json
-Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
 
 {
   "name": "Pawel",

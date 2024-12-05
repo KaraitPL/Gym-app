@@ -6,7 +6,7 @@ import jakarta.security.enterprise.identitystore.DatabaseIdentityStoreDefinition
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 @ApplicationScoped
-@BasicAuthenticationMechanismDefinition(realmName = "Gyms APP")
+@BasicAuthenticationMechanismDefinition(realmName = "Gyms")
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "jdbc/Gyms",
         callerQuery = "select password from trainers where name = ?",
