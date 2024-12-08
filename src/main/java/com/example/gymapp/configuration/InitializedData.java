@@ -17,7 +17,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import jakarta.ejb.Singleton;
 import jakarta.security.enterprise.SecurityContext;
 import jakarta.servlet.ServletContextListener;
 import lombok.NoArgsConstructor;

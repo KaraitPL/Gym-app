@@ -11,6 +11,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotAllowedException;
@@ -39,22 +40,28 @@ public class TrainerService {
 
     private final Pbkdf2PasswordHash passwordHash;
 
+    private final SecurityContext securityContext;
+
     @Inject
-    public TrainerService(TrainerRepository repository, MemberService memberService, @SuppressWarnings("CdiInjectionPointsInspection") Pbkdf2PasswordHash passwordHash) {
+    public TrainerService(TrainerRepository repository, MemberService memberService, @SuppressWarnings("CdiInjectionPointsInspection") Pbkdf2PasswordHash passwordHash, SecurityContext securityContext) {
         this.repository = repository;
         this.memberService = memberService;
         this.passwordHash = passwordHash;
+        this.securityContext = securityContext;
     }
 
-    public Optional<Trainer> find(UUID id){
+    @PermitAll
+    public Optional<Trainer> find(UUID id) {
         return repository.find(id);
     }
 
-    public Optional<Trainer> find(String name){
+    @PermitAll
+    public Optional<Trainer> find(String name) {
         return repository.findByName(name);
     }
 
-    public List<Trainer> findAll(){
+    @PermitAll
+    public List<Trainer> findAll() {
         return repository.findAll();
     }
 
@@ -64,10 +71,12 @@ public class TrainerService {
         repository.create(trainer);
     }
 
-    public void update(Trainer trainer){
+    @PermitAll
+    public void update(Trainer trainer) {
         repository.update(trainer);
     }
 
+    @RolesAllowed(TrainerRoles.ADMIN)
     public void delete(UUID id) {
         Trainer trainer = repository.find(id).orElseThrow(NotFoundException::new);
         Optional<List<Member>> membersToDelete = memberService.findAllByTrainer(id);
@@ -78,6 +87,7 @@ public class TrainerService {
 
     }
 
+    @PermitAll
     public void createAvatar(UUID id, InputStream avatar, String pathToAvatars) throws NotAllowedException {
         repository.find(id).ifPresent(trainer -> {
             try {
@@ -100,6 +110,7 @@ public class TrainerService {
         });
     }*/
 
+    @RolesAllowed(TrainerRoles.ADMIN)
     public void updateAvatar(UUID id, InputStream avatar, String pathToAvatars) {
         repository.find(id).ifPresent(trainer -> {
             try {
@@ -116,7 +127,19 @@ public class TrainerService {
 
     }
 
+    public Optional<Trainer> findCallerPrincipal() {
+        if (securityContext.getCallerPrincipal() != null) {
+            if (securityContext.isCallerInRole("admin")) {
+                System.out.println("Admin.");
+            } else {
+                System.out.println("Normal user.");
+            }
+            return find(securityContext.getCallerPrincipal().getName());
+        } else {
+            return Optional.empty();
+        }
 
 
+    }
 }
 

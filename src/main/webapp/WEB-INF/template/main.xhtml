@@ -14,10 +14,14 @@
         <h:outputStylesheet library="css" name="index.css"/>
     </h:head>
     <h:body>
-        <header class="main-header">
-            <div class="header-content">
-                <h1>Gym App</h1>
-            </div>
+        <header>
+            <h1 class="main-header">Gym App</h1>
+            <h:form styleClass="container d-flex  align-items-center justify-content-end"
+                    rendered="#{facesContext.externalContext.userPrincipal != null}">
+                #{messages.logged} <h:outputText value="#{facesContext.externalContext.userPrincipal.name}"/>
+                <h:commandButton styleClass="btn btn-link" value="#{messages.logout}:"
+                                 action="#{trainerLogout.logoutAction()}"/>
+            </h:form>
         </header>
 
         <nav class="navbar">
@@ -28,6 +32,12 @@
                 <li><h:link outcome="/index.xhtml">Home</h:link></li>
                 <li><h:link outcome="/gym/gym_list.xhtml">Gyms</h:link></li>
                 <li><h:link outcome="/member/member_create.xhtml">Create Member</h:link></li>
+                <h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
+                    <li class="nav-item">
+                        <h:link styleClass="nav-link"
+                                outcome="/trainer/trainer_list.xhtml">Trainers</h:link>
+                    </li>
+                </h:panelGroup>
             </ul>
         </nav>
 

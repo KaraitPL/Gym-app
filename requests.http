@@ -208,14 +208,14 @@ Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
 
 #### Create Member
 // @no-cookie-jar
-PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000003
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000002
 Content-Type: application/json
-Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
 {
-  "name": "Pawel",
-  "benchPressMax": "40",
-  "trainer": "d9f823f4-f057-4f18-aeb7-b6654bc3d000"
+  "name": "Oskar",
+  "benchPressMax": "110",
+  "trainer": "00000000-0000-0000-0000-000000000000"
 }
 
 #### Create Trainer

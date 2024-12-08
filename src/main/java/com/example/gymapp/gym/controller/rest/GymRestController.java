@@ -27,7 +27,7 @@ import java.util.logging.Level;
 
 @Path("")
 @Log
-@RolesAllowed(TrainerRoles.USER)
+@RolesAllowed({TrainerRoles.ADMIN, TrainerRoles.USER})
 public class GymRestController implements GymController {
     private GymService gymService;
     private final DtoFunctionFactory factory;
@@ -90,7 +90,7 @@ public class GymRestController implements GymController {
                 });
     }
 
-    @RolesAllowed("admin")
+    @RolesAllowed(TrainerRoles.ADMIN)
     @Override
     public void deleteGym(UUID id) {
         gymService.find(id).ifPresentOrElse(entity -> gymService.delete(id), () -> {

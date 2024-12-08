@@ -8,6 +8,8 @@ import com.example.gymapp.member.model.function.MemberToEditModelFunction;
 import com.example.gymapp.member.model.function.MemberToModelFunction;
 import com.example.gymapp.member.model.function.ModelToMemberFunction;
 import com.example.gymapp.member.model.function.UpdateMemberWithModelFunction;
+import com.example.gymapp.trainer.model.function.TrainerToModelFunction;
+import com.example.gymapp.trainer.model.function.TrainersToModelFunction;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
@@ -44,4 +46,7 @@ public class ModelFunctionFactory {
     public UpdateMemberWithModelFunction updateMember() {
         return new UpdateMemberWithModelFunction();
     }
+
+    public TrainerToModelFunction trainerToModel() { return new TrainerToModelFunction(); }
+    public TrainersToModelFunction trainersToModel() { return new TrainersToModelFunction(); }
 }

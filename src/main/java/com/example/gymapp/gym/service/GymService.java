@@ -10,6 +10,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AccessLevel;
@@ -24,19 +25,32 @@ import java.util.UUID;
 public class GymService {
     private final GymRepository repository;
     private final MemberService memberService;
+    private final SecurityContext securityContext;
 
     @Inject
-    public GymService(GymRepository gymRepository, MemberService memberService)
+    public GymService(GymRepository gymRepository, MemberService memberService, SecurityContext securityContext)
     {
         this.repository = gymRepository;
         this.memberService = memberService;
+        this.securityContext = securityContext;
     }
 
-    @RolesAllowed(TrainerRoles.USER)
-    public Optional<Gym> find(UUID id) { return repository.find(id); }
+    @RolesAllowed({TrainerRoles.ADMIN, TrainerRoles.USER})
+    public Optional<Gym> find(UUID id) {
+        Optional<Gym> gym = repository.find(id);
+        if (gym.isPresent()) {
+            List<Member> members = gym.get().getMembers();
+            String currentTrainerName = securityContext.getCallerPrincipal().getName();
+            boolean isAdmin = securityContext.isCallerInRole(TrainerRoles.ADMIN);
+            System.out.println(members);
+            members.removeIf(member -> (!member.getTrainer().getName().equals(currentTrainerName)) && !isAdmin);
+            gym.get().setMembers(members);
+        }
+        return gym;
+    }
 
 
-    @RolesAllowed(TrainerRoles.USER)
+    @RolesAllowed({TrainerRoles.ADMIN, TrainerRoles.USER})
     public List<Gym> findAll() { return repository.findAll(); }
 
     @RolesAllowed(TrainerRoles.ADMIN)
