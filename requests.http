@@ -201,21 +201,21 @@ Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
 GET http://localhost:9080/gym-app/api/members
 Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
-### Get One Member
+### Get One Gym Member
 // @no-cookie-jar
-GET http://localhost:9080/gym-app/api/members/00000000-0000-0000-0002-000000000001
-Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+GET http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000003
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
 
 #### Create Member
 // @no-cookie-jar
-PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000002
+PUT http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000003
 Content-Type: application/json
 Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
 
 {
   "name": "Pawel",
   "benchPressMax": "40",
-  "trainer": "00000000-0000-0000-0000-000000000002"
+  "trainer": "d9f823f4-f057-4f18-aeb7-b6654bc3d000"
 }
 
 #### Create Trainer
@@ -239,3 +239,14 @@ Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 // @no-cookie-jar
 DELETE http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000001
 Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+
+### Update Member
+// @no-cookie-jar
+PATCH http://localhost:9080/gym-app/api/gyms/00000000-0000-0000-0001-000000000002/members/00000000-0000-0000-0002-000000000002
+Content-Type: application/json
+Authorization: Basic Um9ubmllIENvbGVtYW46YXJub2xk
+
+{
+  "name": "Oskar",
+  "benchPressMax": "120"
+}

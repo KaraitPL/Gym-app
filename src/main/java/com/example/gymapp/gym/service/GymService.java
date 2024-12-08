@@ -53,7 +53,7 @@ public class GymService {
 
         repository.delete(gym); }
 
-    @RolesAllowed(TrainerRoles.ADMIN)
+    @RolesAllowed(TrainerRoles.USER)
     public void update(Gym gym) { repository.update(gym); }
 
 }

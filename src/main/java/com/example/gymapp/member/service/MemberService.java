@@ -17,6 +17,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -146,7 +147,7 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    private void checkAdminRoleOrOwner(Optional<Member> member) throws EJBAccessException {
+    private void checkAdminRoleOrOwner(Optional<Member> member) {
         if (securityContext.isCallerInRole(TrainerRoles.ADMIN)) {
             return;
         }
@@ -155,7 +156,7 @@ public class MemberService {
                 && member.get().getTrainer().getName().equals(securityContext.getCallerPrincipal().getName())) {
             return;
         }
-        throw new EJBAccessException("Caller not authorized.");
+        throw new NotAuthorizedException("Caller not authorized.");
     }
 
     public Optional<List<Member>> findAllByTrainer(UUID id) {
