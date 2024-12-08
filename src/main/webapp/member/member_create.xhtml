@@ -11,7 +11,7 @@
 
     <ui:define name="content">
         <article>
-            <header><h2>Create member</h2></header>
+            <header><h2>#{msg.create_member}</h2></header>
             <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
 
                 <div>
@@ -26,7 +26,7 @@
                 </div>
 
                 <div>
-                    <p style="margin: 5px 0">Choose gym:</p>
+                    <p style="margin: 5px 0">#{msg.choose_gym}</p>
                     <ui:repeat value="#{memberCreate.gyms}" var="gym">
                         <div class="form-check">
                             <h:selectOneRadio id="radioId" group="gym"

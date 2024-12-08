@@ -12,18 +12,18 @@
 
     <ui:define name="content">
         <article>
-            <header><h2>Edit member</h2></header>
+            <header><h2>#{msg.edit_member}</h2></header>
             <h:form onreset="onReset()" enctype="multipart/form-data">
                 <div>
                     <div>
-                        <h:outputLabel for="name" value="Name:" styleClass="form-label"/>
+                        <h:outputLabel for="name" value="#{msg.benchPressMax}" styleClass="form-label"/>
                         <h:inputText id="name" value="#{memberEdit.member.name}"/>
                     </div>
                 </div>
 
                 <div>
                     <div>
-                        <h:outputLabel for="benchPressMax" value="Bench press max:"/>
+                        <h:outputLabel for="benchPressMax" value="#{msg.benchPressMax}"/>
                         <h:inputText id="benchPressMax" value="#{memberEdit.member.benchPressMax}" type="number"/>
                     </div>
                 </div>
