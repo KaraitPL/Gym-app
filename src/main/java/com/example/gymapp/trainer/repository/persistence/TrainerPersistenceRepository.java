@@ -7,6 +7,9 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +27,22 @@ public class TrainerPersistenceRepository implements TrainerRepository {
     @Override
     public Optional<Trainer> findByName(String name) {
         try {
-            return Optional.of(em.createQuery("select t from Trainer t where t.name = :name", Trainer.class)
-                    .setParameter("name", name)
-                    .getSingleResult());
+            // Utwórz CriteriaBuilder
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+
+            // Utwórz CriteriaQuery dla typu Trainer
+            CriteriaQuery<Trainer> cq = cb.createQuery(Trainer.class);
+
+            // Określ główną encję (tabela "Trainer")
+            Root<Trainer> trainer = cq.from(Trainer.class);
+
+            // Dodaj warunek WHERE
+            cq.select(trainer).where(cb.equal(trainer.get("name"), name));
+
+            // Wykonaj zapytanie i zwróć wynik w Optional
+            return Optional.of(em.createQuery(cq).getSingleResult());
         } catch (NoResultException ex) {
+            // Obsługa przypadku braku wyników
             return Optional.empty();
         }
     }
@@ -40,7 +55,20 @@ public class TrainerPersistenceRepository implements TrainerRepository {
 
     @Override
     public List<Trainer> findAll() {
-        return em.createQuery("select t from Trainer t", Trainer.class).getResultList();
+        // Utwórz CriteriaBuilder
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+
+        // Utwórz CriteriaQuery dla typu Trainer
+        CriteriaQuery<Trainer> cq = cb.createQuery(Trainer.class);
+
+        // Określ główną encję (tabela "Trainer")
+        Root<Trainer> trainer = cq.from(Trainer.class);
+
+        // Dodaj klauzulę SELECT (cała encja Trainer)
+        cq.select(trainer);
+
+        // Wykonaj zapytanie
+        return em.createQuery(cq).getResultList();
     }
 
     @Override

@@ -87,6 +87,7 @@ public class MemberEdit implements Serializable {
             String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
             return viewId + "?faces-redirect=true&includeViewParams=true";
         } catch (TransactionalException ex) {
+            System.out.println("Blad");
             if (ex.getCause() instanceof OptimisticLockException) {
                 init();
                 facesContext.addMessage(null, new FacesMessage("Version collision."));

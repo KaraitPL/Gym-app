@@ -9,6 +9,9 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,27 +29,52 @@ public class MemberPersistenceRepository implements MemberRepository {
 
     @Override
     public List<Member> findAllByTrainer(Trainer trainer) {
-        return em.createQuery("select m from Member m where m.trainer = :trainer", Member.class)
-                .setParameter("trainer", trainer)
-                .getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> member = cq.from(Member.class);
 
+        cq.select(member)
+                .where(cb.equal(member.get("trainer"), trainer));
+
+        return em.createQuery(cq).getResultList();
     }
 
     @Override
     public List<Member> findAllByGym(Gym gym) {
-        return em.createQuery("select m from Member m where m.gym = :gym", Member.class)
-                .setParameter("gym", gym)
-                .getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+        Root<Member> member = cq.from(Member.class);
+
+        cq.select(member)
+                .where(cb.equal(member.get("gym"), gym));
+
+        return em.createQuery(cq).getResultList();
     }
 
     @Override
     public Optional<Member> findByIdAndTrainer(UUID id, Trainer trainer) {
         try {
-            return Optional.of(em.createQuery("select c from Member c where c.id = :id and c.trainer = :trainer", Member.class)
-                    .setParameter("trainer", trainer)
-                    .setParameter("id", id)
-                    .getSingleResult());
+            // Utwórz CriteriaBuilder
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+
+            // Utwórz CriteriaQuery dla typu Member
+            CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+
+            // Określ główną encję (tabela "Member")
+            Root<Member> member = cq.from(Member.class);
+
+            // Dodaj warunki WHERE
+            cq.select(member).where(
+                    cb.and(
+                            cb.equal(member.get("id"), id),
+                            cb.equal(member.get("trainer"), trainer)
+                    )
+            );
+
+            // Wykonaj zapytanie i zwróć wynik w Optional
+            return Optional.of(em.createQuery(cq).getSingleResult());
         } catch (NoResultException ex) {
+            // Obsługa przypadku braku wyników
             return Optional.empty();
         }
     }
@@ -57,7 +85,20 @@ public class MemberPersistenceRepository implements MemberRepository {
 
     @Override
     public List<Member> findAll() {
-        return em.createQuery("select m from Member m", Member.class).getResultList();
+        // Utwórz CriteriaBuilder
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+
+        // Utwórz CriteriaQuery dla typu Member
+        CriteriaQuery<Member> cq = cb.createQuery(Member.class);
+
+        // Określ główną encję (tabela "Member")
+        Root<Member> member = cq.from(Member.class);
+
+        // Dodaj klauzulę SELECT (cała encja Member)
+        cq.select(member);
+
+        // Wykonaj zapytanie
+        return em.createQuery(cq).getResultList();
     }
 
     @Override

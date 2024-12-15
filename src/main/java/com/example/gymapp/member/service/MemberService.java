@@ -13,6 +13,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.SecurityContext;
@@ -116,6 +117,7 @@ public class MemberService {
         gymService.update(gym);
     }
 
+    @TransactionAttribute
     @RolesAllowed(TrainerRoles.USER)
     public void update(Member member, UUID initialGym) {
         Member existingMember = memberRepository.find(member.getId())

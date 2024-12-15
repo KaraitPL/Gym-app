@@ -8,6 +8,9 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +33,20 @@ public class GymPersistenceRepository implements GymRepository {
 
     @Override
     public List<Gym> findAll() {
-        return em.createQuery("select g from Gym g", Gym.class).getResultList();
+        // Utwórz CriteriaBuilder
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+
+        // Utwórz CriteriaQuery dla typu Gym
+        CriteriaQuery<Gym> cq = cb.createQuery(Gym.class);
+
+        // Określ główną encję (tabela "Gym")
+        Root<Gym> gym = cq.from(Gym.class);
+
+        // Dodaj klauzulę SELECT (cała encja)
+        cq.select(gym);
+
+        // Wykonaj zapytanie
+        return em.createQuery(cq).getResultList();
     }
 
     @Override
