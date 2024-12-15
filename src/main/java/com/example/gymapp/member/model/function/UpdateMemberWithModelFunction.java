@@ -3,6 +3,7 @@ package com.example.gymapp.member.model.function;
 import com.example.gymapp.gym.entity.Gym;
 import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.model.MemberEditModel;
+import com.example.gymapp.trainer.entity.Trainer;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;
@@ -17,7 +18,9 @@ public class UpdateMemberWithModelFunction implements BiFunction<Member, MemberE
                 .id(member.getId())
                 .name(request.getName())
                 .benchPressMax(request.getBenchPressMax())
-                .trainer(request.getTrainer())
+                .trainer(Trainer.builder()
+                        .id(request.getTrainer().getId())
+                        .build())
                 .gym(Gym.builder()
                         .id(request.getGym().getId())
                         .name(request.getGym().getName())
@@ -25,6 +28,7 @@ public class UpdateMemberWithModelFunction implements BiFunction<Member, MemberE
                         .gymType(request.getGym().getGymType())
                         .members(request.getGym().getMembers())
                         .build())
+                .version(request.getVersion())
                 .build();
     }
 }

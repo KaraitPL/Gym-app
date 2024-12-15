@@ -2,6 +2,7 @@ package com.example.gymapp.member.model;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -17,4 +18,7 @@ public class MemberModel {
     private int benchPressMax;
     private String trainer;
     private String Gym;
+    private Long version;
+
+    private LocalDateTime creationDateTime;
 }

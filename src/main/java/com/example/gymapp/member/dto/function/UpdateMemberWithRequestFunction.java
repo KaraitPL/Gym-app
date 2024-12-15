@@ -16,6 +16,8 @@ public class UpdateMemberWithRequestFunction implements BiFunction<Member, Patch
                 .benchPressMax(request.getBenchPressMax())
                 .gym(entity.getGym())
                 .trainer(entity.getTrainer())
+                .version(request.getVersion())
+                .creationDateTime(entity.getCreationDateTime())
                 .build();
     }
 }

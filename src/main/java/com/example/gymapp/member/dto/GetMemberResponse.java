@@ -42,4 +42,5 @@ public class GetMemberResponse {
     private int benchPressMax;
     private Trainer trainer;
     private Gym gym;
+    private Long version;
 }

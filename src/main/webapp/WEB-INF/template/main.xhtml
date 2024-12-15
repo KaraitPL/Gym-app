@@ -32,6 +32,7 @@
                 <li><h:link outcome="/index.xhtml">#{messages['nav_home']}</h:link></li>
                 <li><h:link outcome="/gym/gym_list.xhtml">#{messages['nav_gyms']}</h:link></li>
                 <li><h:link outcome="/member/member_create.xhtml">#{messages['nav_add_member']}</h:link></li>
+                <li><h:link outcome="/member/member_list.xhtml">#{messages['nav_list_member']}</h:link></li>
                 <h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
                     <li class="nav-item">
                         <h:link styleClass="nav-link"

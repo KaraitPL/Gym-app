@@ -28,6 +28,9 @@
             <div>Members:</div>
             <ui:repeat layout="unorderedList" value="#{gymView.gym.members}" var="member">
                 <li style="display: flex">
+                    <h:outputText value="#{member.creationDateTime}">
+                        <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd HH:mm"/>
+                    </h:outputText>
                     <h:link outcome="/member/member_view.xhtml">
                         <h:outputText value="#{member.name}"/>
                         <f:param name="id" value="#{member.id}"/>

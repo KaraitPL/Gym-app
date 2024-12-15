@@ -14,7 +14,9 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.TransactionalException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
@@ -89,7 +91,7 @@ public class MemberRestController implements MemberController {
     @RolesAllowed(TrainerRoles.ADMIN)
     @Override
     public GetMembersResponse getMembers() {
-        return factory.membersToResponse().apply(service.findAll());
+        return factory.membersToResponse().apply(service.findAllForCallerPrincipal());
     }
 
 
@@ -97,9 +99,7 @@ public class MemberRestController implements MemberController {
     public void putGymMember(UUID gymId, UUID memberId, PutMemberRequest request) {
         try {
             request.setGym(gymId);
-            Member member = factory.requestToMember().apply(memberId, request);
-            service.create(member, request.getTrainer(), gymId);
-
+            service.createForCallerPrincipal(factory.requestToMember().apply(memberId, request));
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(MemberController.class, "getMember")
                     .build(memberId)
@@ -108,21 +108,31 @@ public class MemberRestController implements MemberController {
         } catch (EJBException ex) {
             if (ex.getCause() instanceof IllegalArgumentException) {
                 log.log(Level.WARNING, ex.getMessage(), ex);
-                throw new BadRequestException("Member already exists, to update member use PATCH method");
+                throw new BadRequestException("Member already exists");
             }
             throw ex;
         } catch (NotFoundException ex) {
             throw new NotFoundException(ex.getMessage());
+        } catch (TransactionalException ex) {
+            if (ex.getCause() instanceof OptimisticLockException) {
+                throw new BadRequestException(ex.getCause());
+            }
         }
     }
 
     @Override
     public void patchGymMember(UUID gymId, UUID memberId, PatchMemberRequest request) {
-        service.findByGymAndMember(gymId, memberId).ifPresentOrElse(
-                entity -> service.update(factory.updateMember().apply(entity, request), gymId),
-                () -> {
-                    throw new NotFoundException("Member not found");
-                });
+        try {
+            service.findByGymAndMember(gymId, memberId).ifPresentOrElse(
+                    entity -> service.update(factory.updateMember().apply(entity, request), gymId),
+                    () -> {
+                        throw new NotFoundException("Member not found");
+                    });
+        } catch (TransactionalException ex) {
+            if (ex.getCause() instanceof OptimisticLockException) {
+                throw new BadRequestException(ex.getCause());
+            }
+        }
     }
 
     @Override

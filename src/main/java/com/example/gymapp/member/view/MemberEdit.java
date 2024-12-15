@@ -7,11 +7,14 @@ import com.example.gymapp.member.entity.Member;
 import com.example.gymapp.member.model.MemberEditModel;
 import com.example.gymapp.member.service.MemberService;
 import jakarta.ejb.EJB;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.TransactionalException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +34,8 @@ public class MemberEdit implements Serializable {
 
     private GymService gymService;
 
+    private final FacesContext facesContext;
+
     @Setter
     @Getter
     private UUID id;
@@ -47,8 +52,9 @@ public class MemberEdit implements Serializable {
     private List<GymModel> gyms;
 
     @Inject
-    public MemberEdit(ModelFunctionFactory factory) {
+    public MemberEdit(ModelFunctionFactory factory, FacesContext facesContext) {
         this.factory = factory;
+        this.facesContext = facesContext;
     }
 
     @EJB
@@ -68,17 +74,25 @@ public class MemberEdit implements Serializable {
             this.newGym = this.member.getGym().getId();
             this.gyms = gymService.findAll().stream().map(factory.gymToModel()).toList();
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Member not found!!!");
+            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Member not found");
         }
     }
 
-    public String saveAction() {
+    public String saveAction() throws IOException {
         if (member.getGym() == null || member.getName() == null) {
             return null;
         }
-        memberService.update(factory.updateMember().apply(memberService.find(id).orElseThrow(), member), newGym);
-        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-        return viewId + "?faces-redirect=true&includeViewParams=true";
+        try {
+            memberService.update(factory.updateMember().apply(memberService.find(id).orElseThrow(), member), newGym);
+            String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+            return viewId + "?faces-redirect=true&includeViewParams=true";
+        } catch (TransactionalException ex) {
+            if (ex.getCause() instanceof OptimisticLockException) {
+                init();
+                facesContext.addMessage(null, new FacesMessage("Version collision."));
+            }
+            return null;
+        }
     }
 
 }

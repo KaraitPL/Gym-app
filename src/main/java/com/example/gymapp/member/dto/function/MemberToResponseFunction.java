@@ -11,6 +11,7 @@ public class MemberToResponseFunction implements Function<Member, GetMemberRespo
         return GetMemberResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .version(entity.getVersion())
                 .benchPressMax(entity.getBenchPressMax())
                 .build();
     }

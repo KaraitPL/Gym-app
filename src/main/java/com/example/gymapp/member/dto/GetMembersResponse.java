@@ -29,4 +29,6 @@ public class GetMembersResponse {
 
     @Singular
     private List<Member> members;
+
+    private Long version;
 }

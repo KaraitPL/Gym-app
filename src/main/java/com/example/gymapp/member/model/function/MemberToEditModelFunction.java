@@ -22,6 +22,7 @@ public class MemberToEditModelFunction implements Function<Member, MemberEditMod
                         .gymType(member.getGym().getGymType())
                         .members(member.getGym().getMembers())
                         .build())
+                .version(member.getVersion())
                 .build();
     }
 }

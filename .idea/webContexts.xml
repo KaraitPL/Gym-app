@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/template/main.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/template" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/member/member_create.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/member" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/member/member_edit.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/member" />
       </map>
     </option>
   </component>

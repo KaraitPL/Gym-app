@@ -12,4 +12,5 @@ import lombok.*;
 public class PatchMemberRequest {
     private String name;
     private int benchPressMax;
+    private Long version;
 }

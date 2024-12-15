@@ -33,6 +33,7 @@ import java.util.UUID;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final TrainerRepository trainerRepository;
 
     private final TrainerService trainerService;
 
@@ -41,11 +42,12 @@ public class MemberService {
     private final SecurityContext securityContext;
 
     @Inject
-    public MemberService(MemberRepository memberRepository, TrainerService trainerService, GymService gymService, @SuppressWarnings("CdiInjectionPointsInspection") SecurityContext securityContext) {
+    public MemberService(MemberRepository memberRepository, TrainerService trainerService, GymService gymService, @SuppressWarnings("CdiInjectionPointsInspection") SecurityContext securityContext, TrainerRepository trainerRepository) {
         this.memberRepository = memberRepository;
         this.trainerService = trainerService;
         this.gymService = gymService;
         this.securityContext = securityContext;
+        this.trainerRepository = trainerRepository;
     }
 
     @RolesAllowed(TrainerRoles.USER)
@@ -60,9 +62,30 @@ public class MemberService {
     public List<Member> findAll() { return memberRepository.findAll(); }
 
     @RolesAllowed(TrainerRoles.USER)
+    public List<Member> findAll(Trainer trainer) {
+        return memberRepository.findAllByTrainer(trainer);
+    }
+
+    @RolesAllowed(TrainerRoles.USER)
     public Optional<Member> findForCallerPrincipal(UUID gymId, UUID memberId) {
         checkAdminRoleOrOwner(memberRepository.find(memberId));
         return findByGymAndMember(gymId, memberId);
+    }
+
+    @RolesAllowed({TrainerRoles.USER, TrainerRoles.ADMIN})
+    public List<Member> findAllForCallerPrincipal() {
+        if (securityContext.isCallerInRole(TrainerRoles.ADMIN)) {
+            return memberRepository.findAll();
+        }
+        Trainer trainer = trainerRepository.findByName(securityContext.getCallerPrincipal().getName()).orElseThrow(IllegalStateException::new);
+        return findAll(trainer);
+    }
+
+    @RolesAllowed(TrainerRoles.USER)
+    public void createForCallerPrincipal(Member member) {
+        Trainer trainer = trainerRepository.findByName(securityContext.getCallerPrincipal().getName()).orElseThrow(IllegalStateException::new);
+        member.setTrainer(trainer);
+        memberRepository.create(member);
     }
 
     public Optional<Member> findByGymAndMember(UUID gymId, UUID memberId){
@@ -95,10 +118,10 @@ public class MemberService {
 
     @RolesAllowed(TrainerRoles.USER)
     public void update(Member member, UUID initialGym) {
-        checkAdminRoleOrOwner(memberRepository.find(member.getId()));
+        Member existingMember = memberRepository.find(member.getId())
+                .orElseThrow(() -> new NotFoundException("Member not found: " + member.getId()));
 
-        Trainer trainer = trainerService.find(member.getTrainer().getId())
-                .orElseThrow(() -> new NotFoundException("Trainer not found: " + member.getTrainer().getId()));
+        checkAdminRoleOrOwner(Optional.of(existingMember));
 
         Gym newGym = gymService.find(member.getGym().getId())
                 .orElseThrow(() -> new NotFoundException("Gym not found: " + member.getGym().getId()));
@@ -107,23 +130,18 @@ public class MemberService {
             Gym oldGym = gymService.find(initialGym)
                     .orElseThrow(() -> new NotFoundException("Initial gym not found: " + initialGym));
 
-            oldGym.getMembers().removeIf(oldGymMember -> oldGymMember.getId().equals(member.getId()));
+            oldGym.getMembers().removeIf(f -> f.getId().equals(existingMember.getId()));
             gymService.update(oldGym);
         }
 
-        boolean trainerMemberUpdated = trainer.getMembers().removeIf(trainerMember -> trainerMember.getId().equals(member.getId()));
-        if (trainerMemberUpdated) {
-            trainer.getMembers().add(member);
-        } else {
-            throw new NotFoundException("Member not found in trainer's members: " + member.getId());
-        }
+        existingMember.setName(member.getName());
+        existingMember.setBenchPressMax(member.getBenchPressMax());
+        existingMember.setGym(newGym);
 
-        newGym.getMembers().removeIf(gymMember -> gymMember.getId().equals(member.getId()));
-        newGym.getMembers().add(member);
-
-        trainerService.update(trainer);
+        trainerService.update(existingMember.getTrainer());
         gymService.update(newGym);
-        memberRepository.update(member);
+
+        memberRepository.update(existingMember);
     }
 
     @RolesAllowed(TrainerRoles.USER)

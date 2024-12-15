@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <ui:define name="content">
+        <article class="text--justified">
+            <header><h2>Members:</h2></header>
+            <h:dataTable value="#{memberList.members.members}" var="member">
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    <h:outputText value="#{member.name}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Version</f:facet>
+                    <h:outputText value="#{member.version}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Created</f:facet>
+                    <h:outputText value="#{member.creationDateTime}">
+                        <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd HH:mm"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Edited</f:facet>
+                    <h:outputText value="#{member.modifiedDateTime}">
+                        <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd HH:mm"/>
+                    </h:outputText>
+                </h:column>
+
+
+                <h:column>
+                    <f:facet name="header">View</f:facet>
+                    <h:link outcome="/member/member_view.xhtml" value="View">
+                        <f:param name="id" value="#{member.id}"/>
+                    </h:link>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Edit</f:facet>
+                    <h:link outcome="/member/member_edit.xhtml" value="Edit">
+                        <f:param name="id" value="#{member.id}"/>
+                    </h:link>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Delete</f:facet>
+                    <h:form>
+                        <h:commandButton value="Delete"
+                                         action="#{memberList.deleteAction(member)}"/>
+                    </h:form>
+                </h:column>
+
+                <f:facet name="footer">
+                    <h:button outcome="/member/member_create.xhtml"
+                              value="Create new member"/>
+                </f:facet>
+            </h:dataTable>
+        </article>
+    </ui:define>
+</ui:composition>

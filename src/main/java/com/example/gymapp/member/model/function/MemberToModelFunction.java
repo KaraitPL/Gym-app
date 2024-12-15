@@ -14,6 +14,8 @@ public class MemberToModelFunction implements Function<Member, MemberModel>, Ser
                 .id(member.getId())
                 .name(member.getName())
                 .benchPressMax(member.getBenchPressMax())
+                .version(member.getVersion())
+                .creationDateTime(member.getCreationDateTime())
                 .build();
     }
 }

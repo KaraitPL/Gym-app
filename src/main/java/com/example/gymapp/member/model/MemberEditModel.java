@@ -18,4 +18,5 @@ public class MemberEditModel {
     private int benchPressMax;
     private Trainer trainer;
     private GymModel gym;
+    private Long version;
 }

@@ -12,27 +12,29 @@
     <ui:define name="content">
         <article>
             <header><h2>#{msg.create_member}</h2></header>
-            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
-
+            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data" id="form">
+                <h:messages/>
                 <div>
                     <h:outputLabel for="name" value="Name:" styleClass="form-label"/>
-                    <h:inputText id="name" value="#{memberCreate.member.name}" styleClass="form-control"/>
+                    <h:inputText id="name" value="#{memberCreate.member.name}" styleClass="form-control" required="true" binding="#{nameInput}"/>
+                    <h:message for="name"/>
                 </div>
 
                 <div>
                     <h:outputLabel for="benchPressMax" value="Bench press max:"/>
-                    <h:inputText id="benchPressMax" value="#{memberCreate.member.benchPressMax}" type="number"/>
-
+                    <h:inputText id="benchPressMax" value="#{memberCreate.member.benchPressMax}" type="number" required="true" binding="#{benchPressMaxInput}"/>
+                    <h:message for="benchPressMax"/>
                 </div>
 
                 <div>
                     <p style="margin: 5px 0">#{msg.choose_gym}</p>
                     <ui:repeat value="#{memberCreate.gyms}" var="gym">
                         <div class="form-check">
-                            <h:selectOneRadio id="radioId" group="gym"
-                                              value="#{memberCreate.member.gym}">
+                            <h:selectOneRadio id="gym" group="gym"
+                                              value="#{memberCreate.member.gym}" required="true" binding="#{gymInput}">
                                 <f:selectItem itemValue="#{gym}" itemLabel="#{gym.name}"/>
                             </h:selectOneRadio>
+                            <h:message for="gym"/>
                         </div>
                     </ui:repeat>
                 </div>

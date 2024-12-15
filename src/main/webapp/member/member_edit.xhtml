@@ -11,9 +11,15 @@
     </f:metadata>
 
     <ui:define name="content">
+
         <article>
             <header><h2>#{msg.edit_member}</h2></header>
             <h:form onreset="onReset()" enctype="multipart/form-data">
+                <h:inputHidden value="#{memberEdit.member.version}" />
+                <div>
+                    <h:messages/>
+                </div>
+
                 <div>
                     <div>
                         <h:outputLabel for="name" value="#{msg.benchPressMax}" styleClass="form-label"/>
