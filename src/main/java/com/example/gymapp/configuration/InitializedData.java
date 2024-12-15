@@ -66,7 +66,7 @@ public class InitializedData implements ServletContextListener {
             System.out.print("Siema 2");
             Trainer trainerArnold = Trainer.builder()
                     .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
-                    .name("c")
+                    .name("Arnold Schwarzenegger")
                     .yearsOfTraining(60)
                     .password("arnold")
                     .members(Collections.emptyList())
